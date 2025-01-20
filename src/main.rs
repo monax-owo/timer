@@ -23,9 +23,29 @@ struct App {
   notification: Notification,
   check_rate: Duration,
   // timer
+  timer: Timer,
+}
+
+#[derive(Debug)]
+struct Timer {
   duration: Duration,
   last: NaiveTime,
   next: NaiveTime,
+}
+
+impl Default for Timer {
+  fn default() -> Self {
+    let now = Local::now().time();
+    let duration = Duration::from_secs(10);
+    let last = now;
+    let next = now + duration;
+
+    Self {
+      duration,
+      last,
+      next,
+    }
+  }
 }
 
 #[derive(Debug, Clone)]
@@ -43,12 +63,12 @@ impl App {
       Message::Tick => {
         let now = Local::now().time();
         println!("now: {:#?}", now);
-        println!("last: {:#?}", self.last);
-        println!("next: {:#?}", self.next);
+        println!("last: {:#?}", self.timer.last);
+        println!("next: {:#?}", self.timer.next);
 
-        if self.last + self.duration < now {
-          self.last = now;
-          self.next = now + self.duration;
+        if self.timer.last + self.timer.duration < now {
+          self.timer.last = now;
+          self.timer.next = now + self.timer.duration;
 
           println!("elapsed!");
           return Task::done(Message::Notify);
@@ -83,12 +103,6 @@ impl App {
   }
 
   fn run() -> (App, Task<Message>) {
-    // TODO:struct Timerに切り離す
-    let now = Local::now().time();
-    let duration = Duration::from_secs(10);
-    let last = now;
-    let next = now + duration;
-
     let state = App {
       notification: Notification::new()
         .appname(APP_NAME)
@@ -97,9 +111,7 @@ impl App {
         .body("Test Body")
         .finalize(),
       check_rate: Duration::from_secs(3),
-      duration,
-      last,
-      next,
+      timer: Timer::default(),
     };
 
     let (_id, open) = window::open(window::Settings::default());
