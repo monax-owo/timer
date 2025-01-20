@@ -11,14 +11,14 @@ use notify_rust::Notification;
 const APP_NAME: &str = "Simple Timer";
 
 fn main() -> iced::Result {
-  iced::daemon(APP_NAME, State::update, State::view)
-    .theme(State::theme)
-    .subscription(State::subscription)
-    .run_with(State::run)
+  iced::daemon(APP_NAME, App::update, App::view)
+    .theme(App::theme)
+    .subscription(App::subscription)
+    .run_with(App::run)
 }
 
 #[derive(Debug)]
-struct State {
+struct App {
   // app
   notification: Notification,
   check_rate: Duration,
@@ -36,7 +36,7 @@ enum Message {
   Notify,
 }
 
-impl State {
+impl App {
   fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::WindowOpened(_id) => {}
@@ -81,14 +81,14 @@ impl State {
     time::every(self.check_rate).map(|_| Message::Tick)
   }
 
-  fn run() -> (State, Task<Message>) {
+  fn run() -> (App, Task<Message>) {
     // TODO:struct Timerに切り離す
     let now = Local::now().time();
     let duration = Duration::from_secs(10);
     let last = now;
     let next = now + duration;
 
-    let state = State {
+    let state = App {
       notification: Notification::new()
         .appname(APP_NAME)
         .auto_icon()
