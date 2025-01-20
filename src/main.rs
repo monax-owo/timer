@@ -51,6 +51,7 @@ impl App {
           self.next = now + self.duration;
 
           println!("elapsed!");
+          return Task::done(Message::Notify);
         }
       }
       Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
