@@ -11,10 +11,10 @@ use notify_rust::Notification;
 const APP_NAME: &str = "Simple Timer";
 
 fn main() -> iced::Result {
-  iced::daemon(APP_NAME, update, view)
-    .theme(theme)
-    .subscription(subscription)
-    .run_with(run)
+  iced::daemon(APP_NAME, State::update, State::view)
+    .theme(State::theme)
+    .subscription(State::subscription)
+    .run_with(State::run)
 }
 
 #[derive(Debug)]
@@ -36,70 +36,72 @@ enum Message {
   Notify,
 }
 
-fn update(state: &mut State, message: Message) -> Task<Message> {
-  match message {
-    Message::WindowOpened(_id) => {}
-    Message::Tick => {
-      let now = Local::now().time();
-      println!("now: {:#?}", now);
-      println!("last: {:#?}", state.last);
-      println!("next: {:#?}", state.next);
+impl State {
+  fn update(&mut self, message: Message) -> Task<Message> {
+    match message {
+      Message::WindowOpened(_id) => {}
+      Message::Tick => {
+        let now = Local::now().time();
+        println!("now: {:#?}", now);
+        println!("last: {:#?}", self.last);
+        println!("next: {:#?}", self.next);
 
-      if state.last + state.duration < now {
-        state.last = now;
-        state.next = now + state.duration;
+        if self.last + self.duration < now {
+          self.last = now;
+          self.next = now + self.duration;
 
-        println!("elapsed!");
+          println!("elapsed!");
+        }
       }
+      Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
+      Message::Notify => self.notification.show().unwrap(),
     }
-    Message::ChangeCheckRate(v) => state.check_rate = Duration::from_secs(v.into()),
-    Message::Notify => state.notification.show().unwrap(),
+    Task::none()
   }
-  Task::none()
-}
 
-fn view(state: &State, _id: window::Id) -> Element<Message> {
-  let slider = slider(
-    1..=60,
-    state.check_rate.as_secs() as u32,
-    Message::ChangeCheckRate,
-  );
-  column![
-    text(state.duration.as_secs()),
-    slider,
-    button("notify").on_press(Message::Notify)
-  ]
-  .into()
-}
+  fn view(&self, _id: window::Id) -> Element<Message> {
+    let slider = slider(
+      1..=60,
+      self.check_rate.as_secs() as u32,
+      Message::ChangeCheckRate,
+    );
+    column![
+      text(self.duration.as_secs()),
+      slider,
+      button("notify").on_press(Message::Notify)
+    ]
+    .into()
+  }
 
-fn theme(_state: &State, _window: window::Id) -> Theme {
-  Theme::Dark
-}
+  fn theme(&self, _window: window::Id) -> Theme {
+    Theme::Dark
+  }
 
-fn subscription(state: &State) -> Subscription<Message> {
-  time::every(state.check_rate).map(|_| Message::Tick)
-}
+  fn subscription(&self) -> Subscription<Message> {
+    time::every(self.check_rate).map(|_| Message::Tick)
+  }
 
-fn run() -> (State, Task<Message>) {
-  // TODO:struct Timerに切り離す
-  let now = Local::now().time();
-  let duration = Duration::from_secs(10);
-  let last = now;
-  let next = now + duration;
+  fn run() -> (State, Task<Message>) {
+    // TODO:struct Timerに切り離す
+    let now = Local::now().time();
+    let duration = Duration::from_secs(10);
+    let last = now;
+    let next = now + duration;
 
-  let state = State {
-    notification: Notification::new()
-      .appname(APP_NAME)
-      .auto_icon()
-      .summary("Test Summary")
-      .body("Test Body")
-      .finalize(),
-    check_rate: Duration::from_secs(3),
-    duration,
-    last,
-    next,
-  };
+    let state = State {
+      notification: Notification::new()
+        .appname(APP_NAME)
+        .auto_icon()
+        .summary("Test Summary")
+        .body("Test Body")
+        .finalize(),
+      check_rate: Duration::from_secs(3),
+      duration,
+      last,
+      next,
+    };
 
-  let (_id, open) = window::open(window::Settings::default());
-  (state, open.map(Message::WindowOpened))
+    let (_id, open) = window::open(window::Settings::default());
+    (state, open.map(Message::WindowOpened))
+  }
 }
