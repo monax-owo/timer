@@ -81,14 +81,13 @@ impl App {
   }
 
   fn view(&self, _id: window::Id) -> Element<Message> {
-    let slider = slider(
-      1..=60,
-      self.check_rate.as_secs() as u32,
-      Message::ChangeCheckRate,
-    );
     column![
-      text(self.duration.as_secs()),
-      slider,
+      text(self.check_rate.as_secs()),
+      slider(
+        1..=60,
+        self.check_rate.as_secs() as u32,
+        Message::ChangeCheckRate,
+      ),
       button("notify").on_press(Message::Notify)
     ]
     .into()
