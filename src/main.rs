@@ -6,12 +6,13 @@ use chrono::{Local, NaiveTime};
 use iced::{
   time,
   widget::{button, column, slider, text},
-  window, Element, Subscription, Task, Theme,
+  window::{self, icon::from_rgba, Icon},
+  Element, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
-  Icon, TrayIcon, TrayIconBuilder,
+  TrayIcon, TrayIconBuilder,
 };
 
 const APP_NAME: &str = "Simple Timer";
@@ -41,7 +42,7 @@ fn main() -> iced::Result {
 
 struct App {
   // app
-  tray_icon: TrayIcon,
+  task_tray: TrayIcon,
   notification: Notification,
   check_rate: Duration,
   // timer
@@ -130,9 +131,9 @@ impl App {
 
   fn run() -> (App, Task<Message>) {
     // tray icon
-    let path = env::current_dir()
-      .expect("failed")
-      .join("assets/icons/32x32.png");
+    let icons_dir = env::current_dir().expect("failed").join("assets/icons");
+    let tray_icon = icons_dir.join("32x32.png");
+    let app_icon = icons_dir.join("128x128.png");
 
     let menu = Menu::new();
     menu
@@ -142,8 +143,8 @@ impl App {
       ])
       .expect("failed to append tray items");
 
-    let tray_icon = TrayIconBuilder::new()
-      .with_icon(load_icon(&path))
+    let task_tray = TrayIconBuilder::new()
+      .with_icon(load_icon(&tray_icon))
       .with_menu_on_left_click(false)
       .with_menu(Box::new(menu))
       .with_title(APP_NAME)
@@ -152,7 +153,7 @@ impl App {
       .expect("could not create tray icon");
 
     let state = App {
-      tray_icon,
+      task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
         .auto_icon()
@@ -163,12 +164,15 @@ impl App {
       timer: Timer::default(),
     };
 
-    let (_id, open) = window::open(window::Settings::default());
+    let (_id, open) = window::open(window::Settings {
+      icon: Some(load_app_icon(&app_icon)),
+      ..Default::default()
+    });
     (state, open.map(Message::WindowOpened))
   }
 }
 
-fn load_icon(path: &std::path::Path) -> Icon {
+fn load_icon(path: &std::path::Path) -> tray_icon::Icon {
   let (icon_rgba, icon_width, icon_height) = {
     let image = image::open(path)
       .expect("Failed to open icon path")
@@ -177,5 +181,17 @@ fn load_icon(path: &std::path::Path) -> Icon {
     let rgba = image.into_raw();
     (rgba, width, height)
   };
-  Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+  tray_icon::Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+}
+
+fn load_app_icon(path: &std::path::Path) -> Icon {
+  let (icon_rgba, icon_width, icon_height) = {
+    let image = image::open(path)
+      .expect("Failed to open icon path")
+      .into_rgba8();
+    let (width, height) = image.dimensions();
+    let rgba = image.into_raw();
+    (rgba, width, height)
+  };
+  from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
 }
