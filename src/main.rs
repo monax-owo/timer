@@ -14,11 +14,12 @@ const APP_NAME: &str = "Simple Timer";
 fn main() -> iced::Result {
   #[cfg(debug_assertions)]
   {
-    let current_dir = std::env::current_dir().unwrap();
-    let input = current_dir.join("assets/icon.png");
+    let assets_dir = std::env::current_dir().unwrap().join("assets");
+    let input = assets_dir.join("icon.png");
+    let output = assets_dir.join("icons");
     icon::command(icon::Options {
       input,
-      output: None,
+      output: Some(output),
       png: None,
       ios_color: "#000".to_string(),
     })
