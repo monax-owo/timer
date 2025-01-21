@@ -13,6 +13,7 @@ const APP_NAME: &str = "Simple Timer";
 
 fn main() -> iced::Result {
   #[cfg(debug_assertions)]
+  if std::env::args().any(|arg| arg == "--gen-icons") {}
   {
     let assets_dir = std::env::current_dir().unwrap().join("assets");
     let input = assets_dir.join("icon.png");
@@ -23,7 +24,8 @@ fn main() -> iced::Result {
       png: None,
       ios_color: "#000".to_string(),
     })
-    .expect("");
+    .expect("failed to generate icons");
+    println!("successfully generate icons");
   }
 
   iced::daemon(APP_NAME, App::update, App::view)
