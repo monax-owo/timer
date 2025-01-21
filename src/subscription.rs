@@ -4,7 +4,7 @@ use iced::{
 };
 use tray_icon::menu::{MenuEvent, MenuId};
 
-pub fn tray_menu_listener() -> impl Stream<Item = MenuId> {
+pub fn tray_listener() -> impl Stream<Item = MenuId> {
   stream::channel(16, |mut output| async move {
     let (sender, mut reciever) = tokio::sync::mpsc::channel(16);
 
