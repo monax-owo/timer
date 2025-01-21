@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{env, time::Duration};
 
 use chrono::{Local, NaiveTime};
 use iced::{
@@ -7,19 +7,33 @@ use iced::{
   window, Element, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
+use tray_icon::{TrayIcon, TrayIconBuilder};
 
 const APP_NAME: &str = "Simple Timer";
 
 fn main() -> iced::Result {
+  #[cfg(debug_assertions)]
+  {
+    let current_dir = std::env::current_dir().unwrap();
+    let input = current_dir.join("assets/icon.png");
+    icon::command(icon::Options {
+      input,
+      output: None,
+      png: None,
+      ios_color: "#000".to_string(),
+    })
+    .expect("");
+  }
+
   iced::daemon(APP_NAME, App::update, App::view)
     .theme(App::theme)
     .subscription(App::subscription)
     .run_with(App::run)
 }
 
-#[derive(Debug)]
 struct App {
   // app
+  tray_icon: TrayIcon,
   notification: Notification,
   check_rate: Duration,
   // timer
@@ -102,7 +116,17 @@ impl App {
   }
 
   fn run() -> (App, Task<Message>) {
+    // tray icon
+    let path = env::current_dir().expect("failed").join("assets/icon.png");
+    let tray_icon = TrayIconBuilder::new()
+      .with_icon(load_icon(&path))
+      .with_title(APP_NAME)
+      .with_tooltip(APP_NAME)
+      .build()
+      .expect("could not create tray icon");
+
     let state = App {
+      tray_icon,
       notification: Notification::new()
         .appname(APP_NAME)
         .auto_icon()
@@ -116,4 +140,16 @@ impl App {
     let (_id, open) = window::open(window::Settings::default());
     (state, open.map(Message::WindowOpened))
   }
+}
+
+fn load_icon(path: &std::path::Path) -> tray_icon::Icon {
+  let (icon_rgba, icon_width, icon_height) = {
+    let image = image::open(path)
+      .expect("Failed to open icon path")
+      .into_rgba8();
+    let (width, height) = image.dimensions();
+    let rgba = image.into_raw();
+    (rgba, width, height)
+  };
+  tray_icon::Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
 }

@@ -96,9 +96,11 @@ impl Source {
 
 pub fn command(options: Options) -> Result<()> {
   let input = options.input;
-  let out_dir = options
-    .output
-    .unwrap_or(std::env::current_exe().context("failed to get current executable path")?);
+  let out_dir = options.output.unwrap_or(
+    std::env::current_dir()
+      .context("failed to get current executable path")?
+      .join("icons"),
+  );
   let png_icon_sizes = options.png.unwrap_or_default();
   let ios_color = css_color::Srgb::from_str(&options.ios_color)
     .map(|color| {
