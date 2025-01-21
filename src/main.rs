@@ -121,7 +121,8 @@ impl App {
     {
       container(
         column![
-          container(row![text(self.check_rate.as_secs()), check_rate_slider]),
+          text(self.timer.next.format("%H:%M:%S").to_string()),
+          row![text(self.check_rate.as_secs()), check_rate_slider],
           button("test notify").on_press(Message::Notify)
         ]
         .align_x(Horizontal::Center)
