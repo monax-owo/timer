@@ -43,6 +43,7 @@ fn main() -> iced::Result {
 
 struct App {
   // app
+  current_theme: Theme,
   _task_tray: TrayIcon,
   notification: Notification,
   check_rate: Duration,
@@ -78,6 +79,7 @@ enum Message {
   TrayIcon(MenuId),
   Tick,
   ChangeCheckRate(u32),
+  ChangeTheme(Theme),
   Notify,
 }
 
@@ -105,6 +107,7 @@ impl App {
         }
       }
       Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
+      Message::ChangeTheme(theme) => self.current_theme = theme,
       Message::Notify => self.notification.show().unwrap(),
     }
     Task::none()
@@ -133,7 +136,7 @@ impl App {
   }
 
   fn theme(&self, _window: window::Id) -> Theme {
-    Theme::Dark
+    self.current_theme.clone()
   }
 
   fn subscription(&self) -> Subscription<Message> {
@@ -167,6 +170,7 @@ impl App {
       .expect("could not create tray icon");
 
     let state = App {
+      current_theme: Theme::Dark,
       _task_tray: task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
