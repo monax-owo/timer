@@ -96,10 +96,9 @@ impl Source {
 
 pub fn command(options: Options) -> Result<()> {
   let input = options.input;
-  let out_dir = options.output.unwrap_or_else(|| {
-    crate::helpers::app_paths::resolve();
-    tauri_dir().join("icons")
-  });
+  let out_dir = options
+    .output
+    .unwrap_or(std::env::current_exe().context("failed to get current executable path")?);
   let png_icon_sizes = options.png.unwrap_or_default();
   let ios_color = css_color::Srgb::from_str(&options.ios_color)
     .map(|color| {
@@ -195,7 +194,7 @@ fn appx(source: &Source, out_dir: &Path) -> Result<()> {
 fn icns(source: &Source, out_dir: &Path) -> Result<()> {
   log::info!(action = "ICNS"; "Creating icon.icns");
   let entries: HashMap<String, IcnsEntry> =
-    serde_json::from_slice(include_bytes!("helpers/icns.json")).unwrap();
+    serde_json::from_slice(include_bytes!("icns.json")).unwrap();
 
   let mut family = IconFamily::new();
 
