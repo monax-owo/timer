@@ -53,22 +53,17 @@ struct App {
 
 #[derive(Debug)]
 struct Timer {
+  enable: bool,
   duration: Duration,
-  last: NaiveTime,
-  next: NaiveTime,
+  last_next: Option<(NaiveTime, NaiveTime)>,
 }
 
 impl Default for Timer {
   fn default() -> Self {
-    let now = Local::now().time();
-    let duration = Duration::from_secs(30);
-    let last = now;
-    let next = now + duration;
-
     Self {
-      duration,
-      last,
-      next,
+      enable: true,
+      duration: Duration::from_secs(30),
+      last_next: None,
     }
   }
 }
@@ -80,34 +75,49 @@ enum Message {
   Tick,
   ChangeCheckRate(u32),
   ChangeTheme(Theme),
+  Pause,
   Notify,
 }
 
 impl App {
   fn update(&mut self, message: Message) -> Task<Message> {
     match message {
-      Message::WindowOpened(_id) => {}
+      Message::WindowOpened(_id) => return Task::done(Message::Tick),
       Message::TrayIcon(MenuId(id)) => println!("id: {}", id),
       Message::Tick => {
-        let now = Local::now().time();
+        if self.timer.enable {
+          let now = Local::now().time();
 
-        #[cfg(debug_assertions)]
-        {
-          println!("now: {:#?}", now);
-          println!("last: {:#?}", self.timer.last);
-          println!("next: {:#?}", self.timer.next);
-        }
+          let elapsed = if let Some((last, next)) = self.timer.last_next {
+            #[cfg(debug_assertions)]
+            {
+              println!("now: {:#?}", now);
+              println!("last: {:#?}", last);
+              println!("next: {:#?}", next);
+            }
 
-        if self.timer.last + self.timer.duration < now {
-          self.timer.last = now;
-          self.timer.next = now + self.timer.duration;
+            last + self.timer.duration < now
+          } else {
+            false
+          };
 
-          println!("elapsed!");
-          return Task::done(Message::Notify);
+          if self.timer.last_next.is_none() | elapsed {
+            self.timer.last_next = Some((now, now + self.timer.duration));
+          }
+
+          if elapsed {
+            println!("elapsed!");
+            return Task::done(Message::Notify);
+          }
         }
       }
       Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
       Message::ChangeTheme(theme) => self.current_theme = theme,
+      Message::Pause => {
+        self.timer.enable = !self.timer.enable;
+        self.timer.last_next = None;
+        return Task::done(Message::Tick);
+      }
       Message::Notify => self.notification.show().unwrap(),
     }
     Task::none()
@@ -118,12 +128,20 @@ impl App {
     #[rustfmt::skip]
     let check_rate_slider = slider(1..=60,self.check_rate.as_secs() as u32,Message::ChangeCheckRate);
 
+    let next = match self.timer.last_next {
+      Some((_last, next)) => next.format("%H:%M:%S").to_string(),
+      None => "Break".to_string(),
+    };
+
+    let pause = if self.timer.enable { "Pause" } else { "Start" };
+
     {
       container(
         column![
-          text(self.timer.next.format("%H:%M:%S").to_string()),
+          row![text("Next:"), text(next),],
+          button(pause).on_press(Message::Pause),
           row![text(self.check_rate.as_secs()), check_rate_slider],
-          button("test notify").on_press(Message::Notify)
+          button("Notify").on_press(Message::Notify),
         ]
         .align_x(Horizontal::Center)
         .spacing(2.0),
