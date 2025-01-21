@@ -124,7 +124,7 @@ impl App {
   fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
       time::every(self.check_rate).map(|_| Message::Tick),
-      Subscription::run(|| subscription::tray_menu_listener()).map(Message::TrayIcon),
+      Subscription::run(subscription::tray_menu_listener).map(Message::TrayIcon),
     ])
   }
 
