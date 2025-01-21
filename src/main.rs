@@ -4,10 +4,10 @@ use std::{env, path::Path, time::Duration};
 
 use chrono::{Local, NaiveTime};
 use iced::{
-  time,
-  widget::{button, column, slider, text},
+  padding, time,
+  widget::{button, column, container, slider, text},
   window::{self, icon::from_rgba},
-  Element, Subscription, Task, Theme,
+  Element, Length, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
 use tray_icon::{
@@ -105,16 +105,17 @@ impl App {
     Task::none()
   }
 
+  #[rustfmt::skip]
   fn view(&self, _id: window::Id) -> Element<Message> {
-    column![
-      text(self.check_rate.as_secs()),
-      slider(
-        1..=60,
-        self.check_rate.as_secs() as u32,
-        Message::ChangeCheckRate,
-      ),
-      button("notify").on_press(Message::Notify)
-    ]
+    {
+      container(
+        column![
+          text(self.check_rate.as_secs()),
+          slider(1..=60, self.check_rate.as_secs() as u32, Message::ChangeCheckRate).width(Length::Fixed(40.0)),
+          button("test notify").on_press(Message::Notify)
+        ]
+      ).padding(padding::all(8.0))
+    }
     .into()
   }
 
