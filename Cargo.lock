@@ -4243,6 +4243,8 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "iced",
+ "icon",
+ "image",
  "notify-rust",
  "tokio",
  "tray-icon",
