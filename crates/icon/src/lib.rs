@@ -6,8 +6,6 @@
 
 // Copyright 2025 Modified by monax-owo
 
-use crate::{helpers::app_paths::tauri_dir, Result};
-
 use std::{
   collections::HashMap,
   fs::{create_dir_all, File},
@@ -17,7 +15,7 @@ use std::{
   sync::Arc,
 };
 
-use anyhow::Context;
+use anyhow::{Context, Result};
 use clap::Parser;
 use icns::{IconFamily, IconType};
 use image::{
