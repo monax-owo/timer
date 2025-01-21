@@ -118,7 +118,9 @@ impl App {
 
   fn run() -> (App, Task<Message>) {
     // tray icon
-    let path = env::current_dir().expect("failed").join("assets/icon.png");
+    let path = env::current_dir()
+      .expect("failed")
+      .join("assets/icons/32x32.png");
     let tray_icon = TrayIconBuilder::new()
       .with_icon(load_icon(&path))
       .with_title(APP_NAME)
