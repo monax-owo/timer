@@ -6,8 +6,7 @@ use chrono::{Local, NaiveTime};
 use iced::{
   padding, time,
   widget::{button, column, container, slider, text},
-  window::{self, icon::from_rgba},
-  Element, Length, Subscription, Task, Theme,
+  window, Element, Length, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
 use tray_icon::{
@@ -180,7 +179,7 @@ fn load_tray_icon(path: &Path) -> tray_icon::Icon {
 
 fn load_app_icon(path: &Path) -> window::Icon {
   let (icon_rgba, icon_width, icon_height) = load_image(path);
-  from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+  window::icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
 }
 
 fn load_image(path: &Path) -> (Vec<u8>, u32, u32) {
