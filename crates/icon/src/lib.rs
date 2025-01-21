@@ -196,7 +196,7 @@ fn appx(source: &Source, out_dir: &Path) -> Result<()> {
 fn icns(source: &Source, out_dir: &Path) -> Result<()> {
   log::info!(action = "ICNS"; "Creating icon.icns");
   let entries: HashMap<String, IcnsEntry> =
-    serde_json::from_slice(include_bytes!("icns.json")).unwrap();
+    serde_json::from_slice(include_bytes!("icon.json")).unwrap();
 
   let mut family = IconFamily::new();
 
