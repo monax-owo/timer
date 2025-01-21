@@ -16,7 +16,6 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use clap::Parser;
 use icns::{IconFamily, IconType};
 use image::{
   codecs::{
@@ -42,23 +41,18 @@ struct PngEntry {
   out_path: PathBuf,
 }
 
-#[derive(Debug, Parser)]
-#[clap(about = "Generate various icons for all major platforms")]
+#[derive(Debug)]
 pub struct Options {
   /// Path to the source icon (squared PNG or SVG file with transparency).
-  #[clap(default_value = "./app-icon.png")]
   input: PathBuf,
   /// Output directory.
   /// Default: 'icons' directory next to the tauri.conf.json file.
-  #[clap(short, long)]
   output: Option<PathBuf>,
 
   /// Custom PNG icon sizes to generate. When set, the default icons are not generated.
-  #[clap(short, long, use_value_delimiter = true)]
   png: Option<Vec<u32>>,
 
   /// The background color of the iOS icon - string as defined in the W3C's CSS Color Module Level 4 <https://www.w3.org/TR/css-color-4/>.
-  #[clap(long, default_value = "#fff")]
   ios_color: String,
 }
 
