@@ -16,6 +16,7 @@ use tray_icon::{
 };
 
 const APP_NAME: &str = "Simple Timer";
+const AUTO_START: bool = true;
 
 fn main() -> iced::Result {
   #[cfg(debug_assertions)]
@@ -198,7 +199,10 @@ impl App {
         .body("Test Body")
         .finalize(),
       check_rate: Duration::from_secs(3),
-      timer: Timer::default(),
+      timer: Timer {
+        enable: AUTO_START,
+        ..Default::default()
+      },
     };
 
     let (_id, open) = window::open(window::Settings {
