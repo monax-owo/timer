@@ -1,12 +1,12 @@
 mod subscription;
 
-use std::{env, time::Duration};
+use std::{env, path::Path, time::Duration};
 
 use chrono::{Local, NaiveTime};
 use iced::{
   time,
   widget::{button, column, slider, text},
-  window::{self, icon::from_rgba, Icon},
+  window::{self, icon::from_rgba},
   Element, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
@@ -42,7 +42,7 @@ fn main() -> iced::Result {
 
 struct App {
   // app
-  task_tray: TrayIcon,
+  _task_tray: TrayIcon,
   notification: Notification,
   check_rate: Duration,
   // timer
@@ -144,7 +144,7 @@ impl App {
       .expect("failed to append tray items");
 
     let task_tray = TrayIconBuilder::new()
-      .with_icon(load_icon(&tray_icon))
+      .with_icon(load_tray_icon(&tray_icon))
       .with_menu_on_left_click(false)
       .with_menu(Box::new(menu))
       .with_title(APP_NAME)
@@ -153,7 +153,7 @@ impl App {
       .expect("could not create tray icon");
 
     let state = App {
-      task_tray,
+      _task_tray: task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
         .auto_icon()
@@ -172,26 +172,21 @@ impl App {
   }
 }
 
-fn load_icon(path: &std::path::Path) -> tray_icon::Icon {
-  let (icon_rgba, icon_width, icon_height) = {
-    let image = image::open(path)
-      .expect("Failed to open icon path")
-      .into_rgba8();
-    let (width, height) = image.dimensions();
-    let rgba = image.into_raw();
-    (rgba, width, height)
-  };
+fn load_tray_icon(path: &Path) -> tray_icon::Icon {
+  let (icon_rgba, icon_width, icon_height) = load_image(path);
   tray_icon::Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
 }
 
-fn load_app_icon(path: &std::path::Path) -> Icon {
-  let (icon_rgba, icon_width, icon_height) = {
-    let image = image::open(path)
-      .expect("Failed to open icon path")
-      .into_rgba8();
-    let (width, height) = image.dimensions();
-    let rgba = image.into_raw();
-    (rgba, width, height)
-  };
+fn load_app_icon(path: &Path) -> window::Icon {
+  let (icon_rgba, icon_width, icon_height) = load_image(path);
   from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+}
+
+fn load_image(path: &Path) -> (Vec<u8>, u32, u32) {
+  let image = image::open(path)
+    .expect("Failed to open icon path")
+    .into_rgba8();
+  let (width, height) = image.dimensions();
+  let rgba = image.into_raw();
+  (rgba, width, height)
 }
