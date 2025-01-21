@@ -12,7 +12,7 @@ use iced::{
 use notify_rust::Notification;
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
-  TrayIcon, TrayIconBuilder,
+  TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
 const APP_NAME: &str = "Simple Timer";
@@ -72,7 +72,8 @@ impl Default for Timer {
 #[derive(Debug, Clone)]
 enum Message {
   WindowOpened(window::Id),
-  TrayIcon(MenuId),
+  TrayMenuEvent(MenuId),
+  TrayIconEvent(TrayIconEvent),
   Tick,
   ChangeCheckRate(u32),
   ChangeTheme(Theme),
@@ -84,7 +85,8 @@ impl App {
   fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::WindowOpened(_id) => return Task::done(Message::Tick),
-      Message::TrayIcon(MenuId(id)) => println!("id: {}", id),
+      Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
+      Message::TrayIconEvent(e) => println!("event: {:#?}", e),
       Message::Tick => {
         if self.timer.enable {
           let now = Local::now().time();
@@ -162,7 +164,10 @@ impl App {
   fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
       time::every(self.check_rate).map(|_| Message::Tick),
-      Subscription::run(subscription::tray_listener).map(Message::TrayIcon),
+      Subscription::run(subscription::tray_listener).map(|e| match e {
+        subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
+        subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
+      }),
     ])
   }
 
