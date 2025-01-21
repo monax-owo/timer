@@ -138,8 +138,8 @@ impl App {
     let menu = Menu::new();
     menu
       .append_items(&[
-        &MenuItem::new("1", true, None),
-        &MenuItem::new("2", true, None),
+        &MenuItem::with_id("1", "1", true, None),
+        &MenuItem::with_id("2", "2", true, None),
       ])
       .expect("failed to append tray items");
 
