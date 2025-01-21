@@ -37,6 +37,7 @@ fn main() -> iced::Result {
   iced::daemon(APP_NAME, App::update, App::view)
     .theme(App::theme)
     .subscription(App::subscription)
+    .scale_factor(|_, _| 1.4)
     .run_with(App::run)
 }
 
@@ -174,6 +175,7 @@ impl App {
     };
 
     let (_id, open) = window::open(window::Settings {
+      size: [600.0, 400.0].into(),
       icon: Some(load_app_icon(&app_icon)),
       ..Default::default()
     });
