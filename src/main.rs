@@ -1,3 +1,5 @@
+mod subscription;
+
 use std::{env, time::Duration};
 
 use chrono::{Local, NaiveTime};
@@ -8,7 +10,7 @@ use iced::{
 };
 use notify_rust::Notification;
 use tray_icon::{
-  menu::{Menu, MenuItem},
+  menu::{Menu, MenuId, MenuItem},
   Icon, TrayIcon, TrayIconBuilder,
 };
 
@@ -71,6 +73,7 @@ impl Default for Timer {
 #[derive(Debug, Clone)]
 enum Message {
   WindowOpened(window::Id),
+  TrayIcon(MenuId),
   Tick,
   ChangeCheckRate(u32),
   Notify,
@@ -80,6 +83,7 @@ impl App {
   fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::WindowOpened(_id) => {}
+      Message::TrayIcon(MenuId(id)) => println!("id: {}", id),
       Message::Tick => {
         let now = Local::now().time();
         println!("now: {:#?}", now);
@@ -118,7 +122,10 @@ impl App {
   }
 
   fn subscription(&self) -> Subscription<Message> {
-    time::every(self.check_rate).map(|_| Message::Tick)
+    Subscription::batch([
+      time::every(self.check_rate).map(|_| Message::Tick),
+      Subscription::run(|| subscription::tray_menu_listener()).map(Message::TrayIcon),
+    ])
   }
 
   fn run() -> (App, Task<Message>) {
