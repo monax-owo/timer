@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 chrono = "0.4.39"
 iced = { version = "0.13.1", features = ["tokio"] }
+image = "0.25.5"
 notify-rust = "4.11.4"
 tokio = "1.43.0"
 tray-icon = "0.19.2"
