@@ -4,8 +4,9 @@ use std::{env, path::Path, time::Duration};
 
 use chrono::{Local, NaiveTime};
 use iced::{
+  alignment::{Horizontal, Vertical},
   padding, time,
-  widget::{button, column, container, slider, text},
+  widget::{button, column, container, row, slider, text},
   window, Element, Length, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
@@ -104,16 +105,24 @@ impl App {
     Task::none()
   }
 
-  #[rustfmt::skip]
+  // #[rustfmt::skip]
   fn view(&self, _id: window::Id) -> Element<Message> {
+    #[rustfmt::skip]
+    let check_rate_slider = slider(1..=60,self.check_rate.as_secs() as u32,Message::ChangeCheckRate);
+
     {
       container(
         column![
-          text(self.check_rate.as_secs()),
-          slider(1..=60, self.check_rate.as_secs() as u32, Message::ChangeCheckRate).width(Length::Fixed(40.0)),
+          container(row![text(self.check_rate.as_secs()), check_rate_slider]),
           button("test notify").on_press(Message::Notify)
         ]
-      ).padding(padding::all(8.0))
+        .align_x(Horizontal::Center)
+        .spacing(2.0),
+      )
+      .align_y(Vertical::Center)
+      .height(Length::Fill)
+      .width(Length::Fill)
+      .padding(padding::all(8.0))
     }
     .into()
   }
