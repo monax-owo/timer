@@ -126,8 +126,18 @@ impl App {
     let path = env::current_dir()
       .expect("failed")
       .join("assets/icons/32x32.png");
+
+    let menu = Menu::new();
+    menu
+      .append_items(&[
+        &MenuItem::new("1", true, None),
+        &MenuItem::new("2", true, None),
+      ])
+      .expect("failed to append tray items");
+
     let tray_icon = TrayIconBuilder::new()
       .with_icon(load_icon(&path))
+      .with_menu(Box::new(menu))
       .with_title(APP_NAME)
       .with_tooltip(APP_NAME)
       .build()
