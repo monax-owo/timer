@@ -13,8 +13,8 @@ const APP_NAME: &str = "Simple Timer";
 
 fn main() -> iced::Result {
   #[cfg(debug_assertions)]
-  if std::env::args().any(|arg| arg == "--gen-icons") {}
-  {
+  if std::env::args().any(|arg| arg == "--gen-icons") {
+    println!("generating icons...");
     let assets_dir = std::env::current_dir().unwrap().join("assets");
     let input = assets_dir.join("icon.png");
     let output = assets_dir.join("icons");
