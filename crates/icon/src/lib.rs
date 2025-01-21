@@ -44,16 +44,16 @@ struct PngEntry {
 #[derive(Debug)]
 pub struct Options {
   /// Path to the source icon (squared PNG or SVG file with transparency).
-  input: PathBuf,
+  pub input: PathBuf,
   /// Output directory.
   /// Default: 'icons' directory next to the tauri.conf.json file.
-  output: Option<PathBuf>,
+  pub output: Option<PathBuf>,
 
   /// Custom PNG icon sizes to generate. When set, the default icons are not generated.
-  png: Option<Vec<u32>>,
+  pub png: Option<Vec<u32>>,
 
   /// The background color of the iOS icon - string as defined in the W3C's CSS Color Module Level 4 <https://www.w3.org/TR/css-color-4/>.
-  ios_color: String,
+  pub ios_color: String,
 }
 
 enum Source {
