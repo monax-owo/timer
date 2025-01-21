@@ -10,7 +10,7 @@ iced = { version = "0.13.1", features = ["tokio"] }
 icon = { version = "0.1.0", path = "crates/icon" }
 image.workspace = true
 notify-rust = "4.11.4"
-tokio = "1.43.0"
+tokio = { version = "1.43.0", features = ["sync"] }
 tray-icon = "0.19.2"
 
 [workspace]
