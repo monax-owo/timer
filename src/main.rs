@@ -56,7 +56,7 @@ struct Timer {
 impl Default for Timer {
   fn default() -> Self {
     let now = Local::now().time();
-    let duration = Duration::from_secs(10);
+    let duration = Duration::from_secs(30);
     let last = now;
     let next = now + duration;
 
@@ -137,6 +137,7 @@ impl App {
 
     let tray_icon = TrayIconBuilder::new()
       .with_icon(load_icon(&path))
+      .with_menu_on_left_click(false)
       .with_menu(Box::new(menu))
       .with_title(APP_NAME)
       .with_tooltip(APP_NAME)
