@@ -88,9 +88,13 @@ impl App {
       Message::TrayIcon(MenuId(id)) => println!("id: {}", id),
       Message::Tick => {
         let now = Local::now().time();
-        println!("now: {:#?}", now);
-        println!("last: {:#?}", self.timer.last);
-        println!("next: {:#?}", self.timer.next);
+
+        #[cfg(debug_assertions)]
+        {
+          println!("now: {:#?}", now);
+          println!("last: {:#?}", self.timer.last);
+          println!("next: {:#?}", self.timer.next);
+        }
 
         if self.timer.last + self.timer.duration < now {
           self.timer.last = now;
