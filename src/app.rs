@@ -37,21 +37,18 @@ impl Timer {
   pub fn tick(&mut self) -> bool {
     if self.enable {
       let now = Local::now().time();
+      let (last, next) = self.last_next.get_or_insert((now, now + self.duration));
 
-      let elapsed = if let Some((last, next)) = self.last_next {
-        #[cfg(debug_assertions)]
-        {
-          println!("now: {:#?}", now);
-          println!("last: {:#?}", last);
-          println!("next: {:#?}", next);
-        }
+      #[cfg(debug_assertions)]
+      {
+        println!("now: {:#?}", now);
+        println!("last: {:#?}", last);
+        println!("next: {:#?}", next);
+      }
 
-        last + self.duration < now
-      } else {
-        false
-      };
+      let elapsed = *last + self.duration < now;
 
-      if self.last_next.is_none() | elapsed {
+      if elapsed {
         self.last_next = Some((now, now + self.duration));
       }
 
