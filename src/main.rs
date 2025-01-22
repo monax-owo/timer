@@ -118,6 +118,7 @@ impl App {
       Message::ChangeTheme(theme) => self.current_theme = theme,
       Message::Pause => {
         self.timer.enable = !self.timer.enable;
+        // TODO
         self.timer.last_next = None;
         return Task::done(Message::Tick);
       }
@@ -164,9 +165,12 @@ impl App {
   fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
       time::every(self.check_rate).map(|_| Message::Tick),
-      Subscription::run(subscription::tray_listener).map(|e| match e {
-        subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
-        subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
+      Subscription::run(subscription::tray_listener).map(|e| {
+        println!("e: {:#?}", e);
+        match e {
+          subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
+          subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
+        }
       }),
     ])
   }

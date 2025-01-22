@@ -14,28 +14,17 @@ pub enum TrayEvent {
 }
 
 pub fn tray_listener() -> impl Stream<Item = TrayEvent> {
-  stream::channel(4, |mut output| async move {
-    let (sender, mut receiver) = tokio::sync::mpsc::channel(4);
-
-    // TODO:fix
-
-    std::thread::spawn(move || loop {
-      println!("0-1");
-      if let Ok(MenuEvent { id }) = MenuEvent::receiver().recv() {
-        println!("1");
-        sender.blocking_send(TrayEvent::MenuEvent(id)).unwrap()
-      }
-
-      println!("0-2");
-      if let Ok(e) = TrayIconEvent::receiver().recv() {
-        println!("2");
-        sender.blocking_send(TrayEvent::IconEvent(e)).unwrap()
-      }
-    });
+  stream::channel(16, |mut output| async move {
+    // let menu_event_receiver = MenuEvent::receiver();
+    let icon_event_receiver = TrayIconEvent::receiver();
 
     loop {
-      if let Some(e) = receiver.recv().await {
-        output.send(e).await.unwrap();
+      // if let Ok(MenuEvent { id }) = menu_event_receiver.recv() {
+      //   output.send(TrayEvent::MenuEvent(id)).await.unwrap();
+      // }
+
+      if let Ok(e) = icon_event_receiver.recv() {
+        output.send(TrayEvent::IconEvent(e)).await.unwrap();
       }
     }
   })
