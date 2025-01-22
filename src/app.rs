@@ -1,6 +1,6 @@
 use std::{env, time::Duration};
 
-use chrono::{Local, NaiveTime};
+use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
   alignment::{Horizontal, Vertical},
   padding, time,
@@ -41,12 +41,13 @@ impl Timer {
 
       #[cfg(debug_assertions)]
       {
-        println!("now: {:#?}", now);
-        println!("last: {:#?}", last);
-        println!("next: {:#?}", next);
+        let fmt = StrftimeItems::new("%H:%M:%S");
+        println!("now: {}", now.format_with_items(fmt.clone()).to_string());
+        println!("last: {}", last.format_with_items(fmt.clone()).to_string());
+        println!("next: {}", next.format_with_items(fmt.clone()).to_string());
       }
 
-      let elapsed = *last + self.duration < now;
+      let elapsed = *next < now;
 
       if elapsed {
         self.last_next = Some((now, now + self.duration));
