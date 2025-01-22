@@ -2,10 +2,11 @@ use std::{env, time::Duration};
 
 use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
-  alignment::{Horizontal, Vertical},
-  padding, time,
+  time,
   widget::{button, column, container, row, slider, text},
-  window, Element, Length, Subscription, Task, Theme,
+  window,
+  Alignment::Center,
+  Element, Length, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
 use tray_icon::{
@@ -120,6 +121,7 @@ impl App {
     };
 
     let pause = if self.timer.enable { "Pause" } else { "Start" };
+
     {
       container(
         column![
@@ -129,17 +131,18 @@ impl App {
             text(self.check_rate.as_secs()),
             container(check_rate_slider.width(Length::Fill)).padding([0, 12])
           ]
-          .align_y(Vertical::Center)
+          .align_y(Center)
           .padding([0, 8]),
           button("Notify").on_press(Message::Notify),
         ]
-        .align_x(Horizontal::Center)
+        .align_x(Center)
         .spacing(2.0),
       )
-      .align_y(Vertical::Center)
+      .align_x(Center)
+      .align_y(Center)
       .height(Length::Fill)
       .width(Length::Fill)
-      .padding(padding::all(8.0))
+      .padding(8.0)
     }
     .into()
   }
