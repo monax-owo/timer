@@ -77,7 +77,8 @@ enum Message {
   Tick,
   ChangeCheckRate(u32),
   ChangeTheme(Theme),
-  Pause,
+  // true = stop, false = start
+  Pause(bool),
   Notify,
 }
 
@@ -116,10 +117,12 @@ impl App {
       }
       Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
       Message::ChangeTheme(theme) => self.current_theme = theme,
-      Message::Pause => {
-        self.timer.enable = !self.timer.enable;
-        // TODO
-        self.timer.last_next = None;
+      Message::Pause(v) => {
+        self.timer.enable = !v;
+        // if stopped
+        if v {
+          self.timer.last_next = None;
+        }
         return Task::done(Message::Tick);
       }
       Message::Notify => self.notification.show().unwrap(),
@@ -143,7 +146,7 @@ impl App {
       container(
         column![
           row![text("Next:"), text(next),],
-          button(pause).on_press(Message::Pause),
+          button(pause).on_press(Message::Pause(self.timer.enable)),
           row![text(self.check_rate.as_secs()), check_rate_slider],
           button("Notify").on_press(Message::Notify),
         ]
