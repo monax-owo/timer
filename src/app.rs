@@ -43,9 +43,9 @@ impl Timer {
       #[cfg(debug_assertions)]
       {
         let fmt = StrftimeItems::new("%H:%M:%S");
-        println!("now: {}", now.format_with_items(fmt.clone()).to_string());
-        println!("last: {}", last.format_with_items(fmt.clone()).to_string());
-        println!("next: {}", next.format_with_items(fmt.clone()).to_string());
+        println!("now: {}", now.format_with_items(fmt.clone()));
+        println!("last: {}", last.format_with_items(fmt.clone()));
+        println!("next: {}", next.format_with_items(fmt.clone()));
       }
 
       let elapsed = *next < now;
@@ -216,6 +216,7 @@ impl App {
       exit_on_close_request: false,
       ..Default::default()
     });
+
     (app_state, open.map(Message::WindowOpened))
   }
 }
