@@ -51,12 +51,10 @@ impl Timer {
 
       if elapsed {
         self.last_next = Some((now, now + self.duration));
+        return true;
       }
-
-      elapsed
-    } else {
-      false
     }
+    false
   }
 }
 
