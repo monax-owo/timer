@@ -15,7 +15,7 @@ pub enum TrayEvent {
 
 pub fn tray_listener() -> impl Stream<Item = TrayEvent> {
   stream::channel(4, |mut output| async move {
-    let (sender, mut reciever) = tokio::sync::mpsc::channel(4);
+    let (sender, mut receiver) = tokio::sync::mpsc::channel(4);
 
     // TODO:fix
 
@@ -34,7 +34,7 @@ pub fn tray_listener() -> impl Stream<Item = TrayEvent> {
     });
 
     loop {
-      if let Some(e) = reciever.recv().await {
+      if let Some(e) = receiver.recv().await {
         output.send(e).await.unwrap();
       }
     }
