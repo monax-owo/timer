@@ -18,7 +18,8 @@ use crate::{subscription, APP_NAME, AUTO_START};
 pub struct App {
   // app
   current_theme: Theme,
-  _task_tray: TrayIcon,
+  #[allow(dead_code)]
+  task_tray: TrayIcon,
   notification: Notification,
   check_rate: Duration,
   // timer
@@ -49,6 +50,7 @@ pub(crate) enum Message {
   TrayIconEvent(TrayIconEvent),
   Tick,
   ChangeCheckRate(u32),
+  // TODO
   ChangeTheme(Theme),
   // true = stop, false = start
   Pause(bool),
@@ -154,6 +156,7 @@ impl App {
     let tray_icon = icons_dir.join("32x32.png");
     let app_icon = icons_dir.join("128x128.png");
 
+    // task tray
     let menu = Menu::new();
     menu
       .append_items(&[
@@ -170,10 +173,12 @@ impl App {
       .with_tooltip(APP_NAME)
       .build()
       .expect("could not create tray icon");
+    // task tray
 
-    let state = App {
+    // state
+    let app_state = App {
       current_theme: Theme::Dark,
-      _task_tray: task_tray,
+      task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
         .auto_icon()
@@ -186,12 +191,13 @@ impl App {
         ..Default::default()
       },
     };
+    // state
 
     let (_id, open) = window::open(window::Settings {
       size: [600.0, 400.0].into(),
       icon: Some(crate::load_app_icon(&app_icon)),
       ..Default::default()
     });
-    (state, open.map(Message::WindowOpened))
+    (app_state, open.map(Message::WindowOpened))
   }
 }
