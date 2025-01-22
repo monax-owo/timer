@@ -165,12 +165,9 @@ impl App {
   fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
       time::every(self.check_rate).map(|_| Message::Tick),
-      Subscription::run(subscription::tray_listener).map(|e| {
-        println!("e: {:#?}", e);
-        match e {
-          subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
-          subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
-        }
+      subscription::tray_listener().map(|e| match e {
+        subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
+        subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
       }),
     ])
   }

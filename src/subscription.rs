@@ -1,6 +1,8 @@
+use std::time::Duration;
+
 use iced::{
   futures::{SinkExt, Stream},
-  stream,
+  stream, Subscription,
 };
 use tray_icon::{
   menu::{MenuEvent, MenuId},
@@ -13,19 +15,39 @@ pub enum TrayEvent {
   IconEvent(TrayIconEvent),
 }
 
-pub fn tray_listener() -> impl Stream<Item = TrayEvent> {
+pub fn tray_listener() -> Subscription<TrayEvent> {
+  Subscription::batch([
+    Subscription::run(menu_listener),
+    Subscription::run(icon_listener),
+  ])
+}
+
+const TICK: u64 = 1000;
+
+fn menu_listener() -> impl Stream<Item = TrayEvent> {
   stream::channel(16, |mut output| async move {
-    // let menu_event_receiver = MenuEvent::receiver();
+    let menu_event_receiver = MenuEvent::receiver();
+
+    loop {
+      if let Ok(MenuEvent { id }) = menu_event_receiver.recv() {
+        output.send(TrayEvent::MenuEvent(id)).await.unwrap();
+      }
+
+      tokio::time::sleep(Duration::from_millis(TICK)).await;
+    }
+  })
+}
+
+fn icon_listener() -> impl Stream<Item = TrayEvent> {
+  stream::channel(16, |mut output| async move {
     let icon_event_receiver = TrayIconEvent::receiver();
 
     loop {
-      // if let Ok(MenuEvent { id }) = menu_event_receiver.recv() {
-      //   output.send(TrayEvent::MenuEvent(id)).await.unwrap();
-      // }
-
       if let Ok(e) = icon_event_receiver.recv() {
         output.send(TrayEvent::IconEvent(e)).await.unwrap();
       }
+
+      tokio::time::sleep(Duration::from_millis(TICK)).await;
     }
   })
 }
