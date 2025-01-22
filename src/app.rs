@@ -33,6 +33,35 @@ pub struct Timer {
   last_next: Option<(NaiveTime, NaiveTime)>,
 }
 
+impl Timer {
+  pub fn tick(&mut self) -> bool {
+    if self.enable {
+      let now = Local::now().time();
+
+      let elapsed = if let Some((last, next)) = self.last_next {
+        #[cfg(debug_assertions)]
+        {
+          println!("now: {:#?}", now);
+          println!("last: {:#?}", last);
+          println!("next: {:#?}", next);
+        }
+
+        last + self.duration < now
+      } else {
+        false
+      };
+
+      if self.last_next.is_none() | elapsed {
+        self.last_next = Some((now, now + self.duration));
+      }
+
+      elapsed
+    } else {
+      false
+    }
+  }
+}
+
 impl Default for Timer {
   fn default() -> Self {
     Self {
@@ -64,30 +93,9 @@ impl App {
       Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
       Message::Tick => {
-        if self.timer.enable {
-          let now = Local::now().time();
-
-          let elapsed = if let Some((last, next)) = self.timer.last_next {
-            #[cfg(debug_assertions)]
-            {
-              println!("now: {:#?}", now);
-              println!("last: {:#?}", last);
-              println!("next: {:#?}", next);
-            }
-
-            last + self.timer.duration < now
-          } else {
-            false
-          };
-
-          if self.timer.last_next.is_none() | elapsed {
-            self.timer.last_next = Some((now, now + self.timer.duration));
-          }
-
-          if elapsed {
-            println!("elapsed!");
-            return Task::done(Message::Notify);
-          }
+        if self.timer.tick() {
+          println!("elapsed!");
+          return Task::done(Message::Notify);
         }
       }
       Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
