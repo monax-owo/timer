@@ -72,6 +72,7 @@ impl Default for Timer {
 #[derive(Debug, Clone)]
 pub(crate) enum Message {
   WindowOpened(window::Id),
+  WindowCloseRequested(window::Id),
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
   Tick,
@@ -87,6 +88,7 @@ impl App {
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::WindowOpened(_id) => return Task::done(Message::Tick),
+      Message::WindowCloseRequested(_id) => (),
       Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
       Message::Tick => {
@@ -153,6 +155,7 @@ impl App {
 
   pub(crate) fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
+      window::close_requests().map(Message::WindowCloseRequested),
       time::every(self.check_rate).map(|_| Message::Tick),
       subscription::tray_listener().map(|e| match e {
         subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
@@ -210,6 +213,7 @@ impl App {
     let (_id, open) = window::open(window::Settings {
       size: [600.0, 400.0].into(),
       icon: Some(crate::load_app_icon(&app_icon)),
+      exit_on_close_request: false,
       ..Default::default()
     });
     (app_state, open.map(Message::WindowOpened))
