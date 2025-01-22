@@ -22,10 +22,11 @@ pub fn tray_listener() -> Subscription<TrayEvent> {
   ])
 }
 
-const TICK: u64 = 1000;
-
 fn menu_listener() -> impl Stream<Item = TrayEvent> {
-  stream::channel(16, |mut output| async move {
+  const CONNECTION: usize = 2;
+  const TICK: u64 = 500;
+
+  stream::channel(CONNECTION, |mut output| async move {
     let menu_event_receiver = MenuEvent::receiver();
 
     loop {
@@ -39,7 +40,10 @@ fn menu_listener() -> impl Stream<Item = TrayEvent> {
 }
 
 fn icon_listener() -> impl Stream<Item = TrayEvent> {
-  stream::channel(16, |mut output| async move {
+  const CONNECTION: usize = 8;
+  const TICK: u64 = 200;
+
+  stream::channel(CONNECTION, |mut output| async move {
     let icon_event_receiver = TrayIconEvent::receiver();
 
     loop {
