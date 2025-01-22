@@ -120,13 +120,17 @@ impl App {
     };
 
     let pause = if self.timer.enable { "Pause" } else { "Start" };
-
     {
       container(
         column![
           row![text("Next:"), text(next),],
           button(pause).on_press(Message::Pause(self.timer.enable)),
-          row![text(self.check_rate.as_secs()), check_rate_slider],
+          row![
+            text(self.check_rate.as_secs()),
+            container(check_rate_slider.width(Length::Fill)).padding([0, 12])
+          ]
+          .align_y(Vertical::Center)
+          .padding([0, 8]),
           button("Notify").on_press(Message::Notify),
         ]
         .align_x(Horizontal::Center)
