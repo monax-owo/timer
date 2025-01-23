@@ -19,7 +19,7 @@ use crate::{subscription, APP_NAME, AUTO_START};
 pub struct App {
   // app
   current_theme: Theme,
-  #[allow(dead_code)]
+  #[allow(unused)]
   task_tray: TrayIcon,
   notification: Notification,
   check_rate: Duration,
@@ -78,6 +78,7 @@ pub(crate) enum Message {
   Tick,
   ChangeCheckRate(u32),
   // TODO
+  #[allow(unused)]
   ChangeTheme(Theme),
   // true = stop, false = start
   Pause(bool),
