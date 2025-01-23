@@ -111,7 +111,6 @@ impl App {
     Task::none()
   }
 
-  // #[rustfmt::skip]
   pub(crate) fn view(&self, id: window::Id) -> Element<Message> {
     crate::view::view(self, id)
   }

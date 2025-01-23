@@ -41,12 +41,3 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
   }
   .into()
 }
-
-// Row::with_children([
-//   text(app.check_rate.as_secs()).into(),
-//   container(check_rate_slider.width(Length::Fill))
-//     .padding([0, 12])
-//     .into(),
-// ])
-// .align_y(Center)
-// .padding([0, 8])
