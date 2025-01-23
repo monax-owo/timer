@@ -4,7 +4,7 @@ use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
   time,
   widget::{button, column, container, row, slider, text},
-  window,
+  window::{self, settings::PlatformSpecific},
   Alignment::Center,
   Element, Length, Subscription, Task, Theme,
 };
@@ -209,6 +209,10 @@ impl App {
 
     let (_id, open) = window::open(window::Settings {
       size: [600.0, 400.0].into(),
+      platform_specific: PlatformSpecific {
+        skip_taskbar: true,
+        ..Default::default()
+      },
       exit_on_close_request: false,
       ..Default::default()
     });
