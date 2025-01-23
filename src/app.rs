@@ -18,20 +18,20 @@ use crate::{subscription, APP_NAME, AUTO_START};
 
 pub struct App {
   // app
-  current_theme: Theme,
+  pub current_theme: Theme,
   #[allow(unused)]
-  task_tray: TrayIcon,
-  notification: Notification,
-  check_rate: Duration,
+  pub task_tray: TrayIcon,
+  pub notification: Notification,
+  pub check_rate: Duration,
   // timer
-  timer: Timer,
+  pub timer: Timer,
 }
 
 #[derive(Debug)]
 pub struct Timer {
-  enable: bool,
-  duration: Duration,
-  last_next: Option<(NaiveTime, NaiveTime)>,
+  pub enable: bool,
+  pub duration: Duration,
+  pub last_next: Option<(NaiveTime, NaiveTime)>,
 }
 
 impl Timer {
@@ -70,7 +70,7 @@ impl Default for Timer {
 }
 
 #[derive(Debug, Clone)]
-pub(crate) enum Message {
+pub enum Message {
   WindowOpened(window::Id),
   WindowCloseRequested(window::Id),
   TrayMenuEvent(MenuId),
