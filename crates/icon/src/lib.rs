@@ -137,9 +137,7 @@ pub fn command(options: Options) -> Result<()> {
       Source::Svg(rtree)
     } else {
       Source::DynamicImage(DynamicImage::ImageRgba8(
-        open(&input)
-          .context("Can't read and decode source image")?
-          .into_rgba8(),
+        open(&input).context("Can't read and decode source image")?.into_rgba8(),
       ))
     }
   } else {
@@ -162,11 +160,7 @@ pub fn command(options: Options) -> Result<()> {
       .map(|size| {
         let name = format!("{size}x{size}.png");
         let out_path = out_dir.join(&name);
-        PngEntry {
-          name,
-          out_path,
-          size,
-        }
+        PngEntry { name, out_path, size }
       })
       .collect::<Vec<PngEntry>>()
     {
@@ -195,8 +189,7 @@ fn appx(source: &Source, out_dir: &Path) -> Result<()> {
 // Main target: macOS
 fn icns(source: &Source, out_dir: &Path) -> Result<()> {
   log::info!(action = "ICNS"; "Creating icon.icns");
-  let entries: HashMap<String, IcnsEntry> =
-    serde_json::from_slice(include_bytes!("icon.json")).unwrap();
+  let entries: HashMap<String, IcnsEntry> = serde_json::from_slice(include_bytes!("icon.json")).unwrap();
 
   let mut family = IconFamily::new();
 
@@ -211,10 +204,7 @@ fn icns(source: &Source, out_dir: &Path) -> Result<()> {
     let image = icns::Image::read_png(&buf[..])?;
 
     family
-      .add_icon_with_type(
-        &image,
-        IconType::from_ostype(entry.ostype.parse().unwrap()).unwrap(),
-      )
+      .add_icon_with_type(&image, IconType::from_ostype(entry.ostype.parse().unwrap()).unwrap())
       .with_context(|| format!("Can't add {name} to Icns Family"))?;
   }
 
@@ -240,12 +230,7 @@ fn ico(source: &Source, out_dir: &Path) -> Result<()> {
 
       write_png(image.as_bytes(), &mut buf, size)?;
 
-      frames.push(IcoFrame::with_encoded(
-        buf,
-        size,
-        size,
-        ExtendedColorType::Rgba8,
-      )?)
+      frames.push(IcoFrame::with_encoded(buf, size, size, ExtendedColorType::Rgba8)?)
     } else {
       frames.push(IcoFrame::as_png(
         image.as_bytes(),
@@ -426,10 +411,7 @@ fn png(source: &Source, out_dir: &Path, ios_color: Rgba<u8>) -> Result<()> {
 
   let mut entries = desktop_entries(out_dir);
 
-  let android_out = out_dir
-    .parent()
-    .unwrap()
-    .join("gen/android/app/src/main/res/");
+  let android_out = out_dir.parent().unwrap().join("gen/android/app/src/main/res/");
   let out = if android_out.exists() {
     android_out
   } else {
@@ -465,12 +447,7 @@ fn png(source: &Source, out_dir: &Path, ios_color: Rgba<u8>) -> Result<()> {
 }
 
 // Resize image and save it to disk.
-fn resize_and_save_png(
-  source: &Source,
-  size: u32,
-  file_path: &Path,
-  bg_color: Option<Rgba<u8>>,
-) -> Result<()> {
+fn resize_and_save_png(source: &Source, size: u32, file_path: &Path, bg_color: Option<Rgba<u8>>) -> Result<()> {
   let mut image = source.resize_exact(size)?;
 
   if let Some(bg_color) = bg_color {

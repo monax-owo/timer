@@ -16,10 +16,7 @@ pub enum TrayEvent {
 }
 
 pub fn tray_listener() -> Subscription<TrayEvent> {
-  Subscription::batch([
-    Subscription::run(menu_listener),
-    Subscription::run(icon_listener),
-  ])
+  Subscription::batch([Subscription::run(menu_listener), Subscription::run(icon_listener)])
 }
 
 fn menu_listener() -> impl Stream<Item = TrayEvent> {
