@@ -2,6 +2,7 @@
 
 mod app;
 mod subscription;
+mod view;
 
 use app::App;
 use iced::window;
