@@ -1,4 +1,4 @@
-use std::{env, time::Duration};
+use std::time::Duration;
 
 use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
@@ -87,7 +87,9 @@ pub(crate) enum Message {
 impl App {
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
     match message {
-      Message::WindowOpened(_id) => return Task::done(Message::Tick),
+      Message::WindowOpened(id) => {
+        return Task::batch([crate::set_app_icon(id), Task::done(Message::Tick)])
+      }
       Message::WindowCloseRequested(_id) => (),
       Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
@@ -165,11 +167,6 @@ impl App {
   }
 
   pub(crate) fn run() -> (App, Task<Message>) {
-    // tray icon
-    let icons_dir = env::current_dir().expect("failed").join("assets/icons");
-    let tray_icon = icons_dir.join("32x32.png");
-    let app_icon = icons_dir.join("128x128.png");
-
     // task tray
     const SHOW_ID: &str = "show";
     const QUIT_ID: &str = "quit";
@@ -183,7 +180,7 @@ impl App {
       .expect("failed to append tray items");
 
     let task_tray = TrayIconBuilder::new()
-      .with_icon(crate::load_tray_icon(&tray_icon))
+      .with_icon(crate::load_tray_icon())
       .with_menu_on_left_click(false)
       .with_menu(Box::new(menu))
       .with_title(APP_NAME)
@@ -212,7 +209,6 @@ impl App {
 
     let (_id, open) = window::open(window::Settings {
       size: [600.0, 400.0].into(),
-      icon: Some(crate::load_app_icon(&app_icon)),
       exit_on_close_request: false,
       ..Default::default()
     });

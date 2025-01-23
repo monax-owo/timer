@@ -1,8 +1,6 @@
 mod app;
 mod subscription;
 
-use std::path::Path;
-
 use app::App;
 use iced::window;
 
@@ -33,19 +31,25 @@ fn main() -> iced::Result {
     .run_with(App::run)
 }
 
-fn load_tray_icon(path: &Path) -> tray_icon::Icon {
-  let (icon_rgba, icon_width, icon_height) = load_image(path);
-  tray_icon::Icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+fn load_tray_icon() -> tray_icon::Icon {
+  const TRAY_ICON: &[u8] = include_bytes!("../assets/icons/32x32.png");
+
+  let (rgba, width, height) = load_image(TRAY_ICON);
+
+  tray_icon::Icon::from_rgba(rgba, width, height).expect("Failed to open icon")
 }
 
-fn load_app_icon(path: &Path) -> window::Icon {
-  let (icon_rgba, icon_width, icon_height) = load_image(path);
-  window::icon::from_rgba(icon_rgba, icon_width, icon_height).expect("Failed to open icon")
+fn set_app_icon<T>(id: window::Id) -> iced::Task<T> {
+  const APP_ICON: &[u8] = include_bytes!("../assets/icons/128x128.png");
+
+  let (rgba, width, height) = load_image(APP_ICON);
+  let icon = window::icon::from_rgba(rgba, width, height).expect("Failed to set app icon");
+  window::change_icon(id, icon)
 }
 
-fn load_image(path: &Path) -> (Vec<u8>, u32, u32) {
-  let image = image::open(path)
-    .expect("Failed to open icon path")
+fn load_image(bytes: &[u8]) -> (Vec<u8>, u32, u32) {
+  let image = image::load_from_memory_with_format(bytes, image::ImageFormat::Png)
+    .expect("Failed to load image")
     .into_rgba8();
   let (width, height) = image.dimensions();
   let rgba = image.into_raw();
