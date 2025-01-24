@@ -90,6 +90,7 @@ impl App {
         println!("id: {:#?}", id);
         match id.0.as_str() {
           Self::SHOW_ID => return Task::done(Message::WindowCreateRequested),
+          Self::QUIT_ID => (),
           _ => (),
         }
       }
