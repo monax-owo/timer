@@ -6,6 +6,8 @@ mod subscription;
 use app::App;
 use iced::window;
 
+// pub(crate) const APPID: &str = "com.squirrel.Discord.Discord";
+pub(crate) const APPID: &str = "b5d7e61b-dbcc-4f57-9aba-64908ce0111a";
 pub(crate) const APP_NAME: &str = "Simple Timer";
 pub(crate) const AUTO_START: bool = true;
 
@@ -30,6 +32,10 @@ fn main() -> iced::Result {
     .theme(App::theme)
     .subscription(App::subscription)
     .scale_factor(|_, _| 1.4)
+    .settings(iced::Settings {
+      id: Some(APPID.to_string()),
+      ..Default::default()
+    })
     .run_with(App::run)
 }
 

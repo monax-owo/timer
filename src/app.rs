@@ -14,7 +14,7 @@ use tray_icon::{
   TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
-use crate::{subscription, APP_NAME, AUTO_START};
+use crate::{subscription, APPID, APP_NAME, AUTO_START};
 
 pub struct App {
   // app
@@ -164,6 +164,7 @@ impl App {
       task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
+        .app_id(APPID)
         // TODO: tempdir
         // .image_path(path)
         .summary("Test Summary")
