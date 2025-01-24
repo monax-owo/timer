@@ -65,8 +65,11 @@ impl App {
         _ => (),
       },
       Message::WindowCreateRequested => {
-        println!("window create requested");
-        if self.window.is_none() {
+        if let Some(id) = self.window {
+          return window::gain_focus(id);
+        } else {
+          println!("window created");
+
           let (id, open) = window::open(window::Settings {
             size: [600.0, 400.0].into(),
             platform_specific: PlatformSpecific {
