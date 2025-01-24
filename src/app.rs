@@ -1,4 +1,5 @@
 mod timer;
+mod view;
 
 use std::time::Duration;
 
@@ -76,7 +77,7 @@ impl App {
   }
 
   pub(crate) fn view(&self, id: window::Id) -> Element<Message> {
-    crate::view::view(self, id)
+    view::view(self, id)
   }
 
   pub(crate) fn theme(&self, _window: window::Id) -> Theme {
