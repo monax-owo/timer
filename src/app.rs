@@ -20,6 +20,8 @@ pub struct App {
   // app
   pub current_theme: Theme,
   #[allow(unused)]
+  pub window: Option<window::Id>,
+  #[allow(unused)]
   pub task_tray: TrayIcon,
   pub notification: Notification,
   pub check_rate: Duration,
@@ -126,8 +128,21 @@ impl App {
       .expect("could not create tray icon");
     // task tray
 
+    // window
+    let (id, _open) = window::open(window::Settings {
+      size: [600.0, 400.0].into(),
+      platform_specific: PlatformSpecific {
+        skip_taskbar: true,
+        ..Default::default()
+      },
+      exit_on_close_request: false,
+      ..Default::default()
+    });
+    // window
+
     // state
     let app_state = App {
+      window: Some(id),
       current_theme: Theme::Dark,
       task_tray,
       notification: Notification::new()
@@ -143,16 +158,6 @@ impl App {
       },
     };
     // state
-
-    let (_id, _open) = window::open(window::Settings {
-      size: [600.0, 400.0].into(),
-      platform_specific: PlatformSpecific {
-        skip_taskbar: true,
-        ..Default::default()
-      },
-      exit_on_close_request: false,
-      ..Default::default()
-    });
 
     (app_state, Task::none())
   }
