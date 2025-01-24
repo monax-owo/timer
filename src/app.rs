@@ -64,7 +64,22 @@ impl App {
         // window::Event::Unfocused => todo!(),
         _ => (),
       },
-      Message::WindowCreateRequested => println!("window create requested"),
+      Message::WindowCreateRequested => {
+        println!("window create requested");
+        if self.window.is_none() {
+          let (id, open) = window::open(window::Settings {
+            size: [600.0, 400.0].into(),
+            platform_specific: PlatformSpecific {
+              skip_taskbar: true,
+              ..Default::default()
+            },
+            exit_on_close_request: false,
+            ..Default::default()
+          });
+          self.window = Some(id);
+          return open.map(|_| Message::Tick);
+        }
+      }
       Message::TrayMenuEvent(id) => {
         println!("id: {:#?}", id);
         match id.0.as_str() {
@@ -136,21 +151,9 @@ impl App {
       .expect("could not create tray icon");
     // task tray
 
-    // window
-    let (id, _open) = window::open(window::Settings {
-      size: [600.0, 400.0].into(),
-      platform_specific: PlatformSpecific {
-        skip_taskbar: true,
-        ..Default::default()
-      },
-      exit_on_close_request: false,
-      ..Default::default()
-    });
-    // window
-
     // state
     let app_state = App {
-      window: Some(id),
+      window: None,
       current_theme: Theme::Dark,
       task_tray,
       notification: Notification::new()
@@ -167,6 +170,6 @@ impl App {
     };
     // state
 
-    (app_state, Task::none())
+    (app_state, Task::done(Message::WindowCreateRequested))
   }
 }
