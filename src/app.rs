@@ -1,6 +1,7 @@
+mod timer;
+
 use std::time::Duration;
 
-use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
   event, time,
   window::{self, settings::PlatformSpecific},
@@ -22,49 +23,7 @@ pub struct App {
   pub notification: Notification,
   pub check_rate: Duration,
   // timer
-  pub timer: Timer,
-}
-
-#[derive(Debug)]
-pub struct Timer {
-  pub enable: bool,
-  pub duration: Duration,
-  pub last_next: Option<(NaiveTime, NaiveTime)>,
-}
-
-impl Timer {
-  pub fn tick(&mut self) -> bool {
-    if self.enable {
-      let now = Local::now().time();
-      let (last, next) = self.last_next.get_or_insert((now, now + self.duration));
-
-      #[cfg(debug_assertions)]
-      {
-        let fmt = StrftimeItems::new("%H:%M:%S");
-        println!("now: {}", now.format_with_items(fmt.clone()));
-        println!("last: {}", last.format_with_items(fmt.clone()));
-        println!("next: {}", next.format_with_items(fmt.clone()));
-      }
-
-      let elapsed = *next < now;
-
-      if elapsed {
-        self.last_next = Some((now, now + self.duration));
-        return true;
-      }
-    }
-    false
-  }
-}
-
-impl Default for Timer {
-  fn default() -> Self {
-    Self {
-      enable: true,
-      duration: Duration::from_secs(30),
-      last_next: None,
-    }
-  }
+  pub timer: timer::Timer,
 }
 
 #[derive(Debug, Clone)]
@@ -179,7 +138,7 @@ impl App {
         .body("Test Body")
         .finalize(),
       check_rate: Duration::from_secs(3),
-      timer: Timer {
+      timer: timer::Timer {
         enable: AUTO_START,
         ..Default::default()
       },
