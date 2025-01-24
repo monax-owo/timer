@@ -2,9 +2,9 @@ use std::time::Duration;
 
 use chrono::{format::StrftimeItems, Local, NaiveTime};
 use iced::{
-  time,
+  event, time,
   window::{self, settings::PlatformSpecific},
-  Element, Subscription, Task, Theme,
+  Element, Event, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
 use tray_icon::{
@@ -126,7 +126,17 @@ impl App {
 
   pub(crate) fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
-      window::close_requests().map(Message::WindowCloseRequested),
+      event::listen_with(|e, _status, id| match e {
+        Event::Window(e) => match e {
+          // window::Event::Opened { .. } => todo!(),
+          // window::Event::Closed => todo!(),
+          window::Event::CloseRequested => Some(Message::WindowCloseRequested(id)),
+          // window::Event::Focused => todo!(),
+          // window::Event::Unfocused => todo!(),
+          _ => None,
+        },
+        _ => None,
+      }),
       time::every(self.check_rate).map(|_| Message::Tick),
       subscription::tray_listener().map(|e| match e {
         subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
