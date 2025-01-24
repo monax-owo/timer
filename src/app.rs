@@ -58,7 +58,7 @@ impl App {
             Task::done(Message::Tick),
           ])
         }
-        window::Event::CloseRequested => (),
+        window::Event::Closed => self.window = None,
         // TODO
         // window::Event::Focused => todo!(),
         // window::Event::Unfocused => todo!(),
@@ -66,7 +66,9 @@ impl App {
       },
       Message::WindowCreateRequested => {
         if let Some(id) = self.window {
-          return window::gain_focus(id);
+          return window::minimize(id, false)
+            .chain(window::change_mode(id, window::Mode::Windowed))
+            .chain(window::gain_focus(id));
         } else {
           println!("window created");
 
@@ -76,11 +78,10 @@ impl App {
               skip_taskbar: true,
               ..Default::default()
             },
-            exit_on_close_request: false,
             ..Default::default()
           });
           self.window = Some(id);
-          return open.map(|_| Message::Tick);
+          return open.chain(window::gain_focus(id)).map(|_| Message::Tick);
         }
       }
       Message::TrayMenuEvent(id) => {
