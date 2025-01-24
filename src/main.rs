@@ -42,12 +42,11 @@ fn load_tray_icon() -> tray_icon::Icon {
   tray_icon::Icon::from_rgba(rgba, width, height).expect("Failed to open icon")
 }
 
-fn set_app_icon<T>(id: window::Id) -> iced::Task<T> {
+fn load_app_icon() -> window::Icon {
   const APP_ICON: &[u8] = include_bytes!("../assets/icons/128x128.png");
 
   let (rgba, width, height) = load_image(APP_ICON);
-  let icon = window::icon::from_rgba(rgba, width, height).expect("Failed to set app icon");
-  window::change_icon(id, icon)
+  window::icon::from_rgba(rgba, width, height).expect("Failed to set app icon")
 }
 
 fn load_image(bytes: &[u8]) -> (Vec<u8>, u32, u32) {

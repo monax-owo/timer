@@ -86,7 +86,12 @@ pub enum Message {
 impl App {
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
     match message {
-      Message::WindowOpened(id) => return Task::batch([crate::set_app_icon(id), Task::done(Message::Tick)]),
+      Message::WindowOpened(id) => {
+        return Task::batch([
+          window::change_icon(id, crate::load_app_icon()),
+          Task::done(Message::Tick),
+        ])
+      }
       Message::WindowCloseRequested(_id) => (),
       Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
