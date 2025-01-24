@@ -74,6 +74,8 @@ impl App {
 
           let (id, open) = window::open(window::Settings {
             size: [600.0, 400.0].into(),
+            resizable: false,
+            transparent: true,
             platform_specific: PlatformSpecific {
               skip_taskbar: true,
               ..Default::default()
