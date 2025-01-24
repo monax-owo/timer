@@ -164,7 +164,8 @@ impl App {
       task_tray,
       notification: Notification::new()
         .appname(APP_NAME)
-        .auto_icon()
+        // TODO: tempdir
+        // .image_path(path)
         .summary("Test Summary")
         .body("Test Body")
         .finalize(),
