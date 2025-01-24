@@ -29,8 +29,7 @@ pub struct App {
 
 #[derive(Debug, Clone)]
 pub enum Message {
-  WindowOpened(window::Id),
-  WindowCloseRequested(window::Id),
+  WindowEvent((window::Event, window::Id)),
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
   Tick,
@@ -46,13 +45,19 @@ pub enum Message {
 impl App {
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
     match message {
-      Message::WindowOpened(id) => {
-        return Task::batch([
-          window::change_icon(id, crate::load_app_icon()),
-          Task::done(Message::Tick),
-        ])
-      }
-      Message::WindowCloseRequested(_id) => (),
+      Message::WindowEvent((e, id)) => match e {
+        window::Event::Opened { .. } => {
+          return Task::batch([
+            window::change_icon(id, crate::load_app_icon()),
+            Task::done(Message::Tick),
+          ])
+        }
+        window::Event::CloseRequested => (),
+        // TODO
+        // window::Event::Focused => todo!(),
+        // window::Event::Unfocused => todo!(),
+        _ => (),
+      },
       Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
       Message::Tick => {
@@ -87,14 +92,7 @@ impl App {
   pub(crate) fn subscription(&self) -> Subscription<Message> {
     Subscription::batch([
       event::listen_with(|e, _status, id| match e {
-        Event::Window(e) => match e {
-          // window::Event::Opened { .. } => todo!(),
-          // window::Event::Closed => todo!(),
-          window::Event::CloseRequested => Some(Message::WindowCloseRequested(id)),
-          // window::Event::Focused => todo!(),
-          // window::Event::Unfocused => todo!(),
-          _ => None,
-        },
+        Event::Window(e) => Some(Message::WindowEvent((e, id))),
         _ => None,
       }),
       time::every(self.check_rate).map(|_| Message::Tick),
@@ -146,7 +144,7 @@ impl App {
     };
     // state
 
-    let (_id, open) = window::open(window::Settings {
+    let (_id, _open) = window::open(window::Settings {
       size: [600.0, 400.0].into(),
       platform_specific: PlatformSpecific {
         skip_taskbar: true,
@@ -156,6 +154,6 @@ impl App {
       ..Default::default()
     });
 
-    (app_state, open.map(Message::WindowOpened))
+    (app_state, Task::none())
   }
 }
