@@ -10,8 +10,8 @@ use crate::app::{App, Message};
 pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
   let check_rate_slider = slider(1..=60, app.check_rate.as_secs() as u32, Message::ChangeCheckRate);
 
-  let next = match app.timer.last_next {
-    Some((_last, next)) => format!("Next: {}", next.format("%H:%M:%S").to_string()),
+  let next = match app.timer.next {
+    Some(next) => format!("Next: {}", next.format("%H:%M:%S").to_string()),
     None => "Break".to_string(),
   };
 

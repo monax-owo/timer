@@ -106,7 +106,7 @@ impl App {
         self.timer.enable = !v;
         // if stopped
         if v {
-          self.timer.last_next = None;
+          self.timer.next = None;
         }
         return Task::done(Message::Tick);
       }
