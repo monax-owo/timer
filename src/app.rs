@@ -32,6 +32,7 @@ pub struct App {
 #[derive(Debug, Clone)]
 pub enum Message {
   WindowEvent((window::Event, window::Id)),
+  WindowCreateRequested,
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
   Tick,
@@ -60,7 +61,14 @@ impl App {
         // window::Event::Unfocused => todo!(),
         _ => (),
       },
-      Message::TrayMenuEvent(id) => println!("id: {:#?}", id),
+      Message::WindowCreateRequested => println!("window create requested"),
+      Message::TrayMenuEvent(id) => {
+        println!("id: {:#?}", id);
+        match id.0.as_str() {
+          "show" => return Task::done(Message::WindowCreateRequested),
+          _ => (),
+        }
+      }
       Message::TrayIconEvent(e) => println!("event: {:#?}", e),
       Message::Tick => {
         if self.timer.tick() {
