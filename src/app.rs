@@ -46,6 +46,9 @@ pub enum Message {
 }
 
 impl App {
+  pub const SHOW_ID: &str = "show";
+  pub const QUIT_ID: &str = "quit";
+
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
     match message {
       Message::WindowEvent((e, id)) => match e {
@@ -65,7 +68,7 @@ impl App {
       Message::TrayMenuEvent(id) => {
         println!("id: {:#?}", id);
         match id.0.as_str() {
-          "show" => return Task::done(Message::WindowCreateRequested),
+          Self::SHOW_ID => return Task::done(Message::WindowCreateRequested),
           _ => (),
         }
       }
@@ -115,14 +118,11 @@ impl App {
 
   pub(crate) fn run() -> (App, Task<Message>) {
     // task tray
-    const SHOW_ID: &str = "show";
-    const QUIT_ID: &str = "quit";
-
     let menu = Menu::new();
     menu
       .append_items(&[
-        &MenuItem::with_id(SHOW_ID, "show", true, None),
-        &MenuItem::with_id(QUIT_ID, "quit", true, None),
+        &MenuItem::with_id(Self::SHOW_ID, "show", true, None),
+        &MenuItem::with_id(Self::QUIT_ID, "quit", true, None),
       ])
       .expect("failed to append tray items");
 
