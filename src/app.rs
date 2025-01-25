@@ -1,14 +1,17 @@
+mod config;
 mod timer;
 mod view;
 
 use std::time::Duration;
 
+use configu::Config;
 use iced::{
   event, time,
   window::{self, settings::PlatformSpecific},
   Element, Event, Subscription, Task, Theme,
 };
 use notify_rust::Notification;
+use serde::{Deserialize, Serialize};
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
   TrayIcon, TrayIconBuilder, TrayIconEvent,
@@ -25,8 +28,20 @@ pub struct App {
   pub task_tray: TrayIcon,
   pub notification: Notification,
   pub check_rate: Duration,
+  // config
+  #[allow(unused)]
+  pub user_config: Config<UserConfig>,
   // timer
   pub timer: timer::Timer,
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub struct UserConfig {}
+
+impl Default for UserConfig {
+  fn default() -> Self {
+    Self {}
+  }
 }
 
 #[derive(Debug, Clone)]
@@ -139,6 +154,10 @@ impl App {
   }
 
   pub(crate) fn run() -> (App, Task<Message>) {
+    // config
+    let user_config = config::config::<UserConfig>();
+    // config
+
     // task tray
     let menu = Menu::new();
     menu
@@ -172,6 +191,7 @@ impl App {
         .body("Test Body")
         .finalize(),
       check_rate: Duration::from_secs(3),
+      user_config,
       timer: timer::Timer {
         enable: AUTO_START,
         ..Default::default()
