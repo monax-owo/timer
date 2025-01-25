@@ -749,6 +749,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "configu"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "94570123273dc78ee3c08ca466a44745bc53f0906f650989230e75fdcd66312a"
+dependencies = [
+ "anyhow",
+ "serde",
+ "toml",
+]
+
+[[package]]
 name = "core-foundation"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4242,10 +4253,12 @@ name = "timer"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "configu",
  "iced",
  "icon",
  "image",
  "notify-rust",
+ "serde",
  "tokio",
  "tray-icon",
 ]

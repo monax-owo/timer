@@ -6,10 +6,12 @@ resolver = "2"
 
 [dependencies]
 chrono = "0.4.39"
+configu = "0.2.0"
 iced = { version = "0.13.1", features = ["tokio"] }
 icon = { version = "0.1.0", path = "crates/icon" }
 image.workspace = true
 notify-rust = "4.11.4"
+serde = { version = "1.0.217", features = ["derive"] }
 tokio = { version = "1.43.0", features = ["sync"] }
 tray-icon = "0.19.2"
 
