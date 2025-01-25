@@ -36,11 +36,13 @@ pub struct App {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct UserConfig {}
+pub struct UserConfig {
+  test_value: i32,
+}
 
 impl Default for UserConfig {
   fn default() -> Self {
-    Self {}
+    Self { test_value: 0 }
   }
 }
 
@@ -156,6 +158,7 @@ impl App {
   pub(crate) fn run() -> (App, Task<Message>) {
     // config
     let user_config = config::config::<UserConfig>();
+    dbg!((*user_config).clone());
     // config
 
     // task tray

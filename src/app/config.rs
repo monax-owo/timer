@@ -1,12 +1,20 @@
 use std::env::current_exe;
 
-use configu::Config;
+use configu::{Config, Configurable};
 use serde::{Deserialize, Serialize};
 
 const CONFIG_FILE: &str = "timer.toml";
 
 pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Config<T> {
-  let config_file = current_exe().expect("failed to get current exe").join(CONFIG_FILE);
+  let config_file = current_exe()
+    .expect("failed to get current exe")
+    .parent()
+    .expect("failed to get parent directory")
+    .join(CONFIG_FILE);
+  println!("{:#?}", config_file.to_string_lossy());
   let file_path = if config_file.is_file() { Some(config_file) } else { None };
-  Config::<T>::open(file_path)
+  let mut config = Config::<T>::open(file_path);
+  let res = config.load();
+  println!("res: {:#?}", res);
+  config
 }
