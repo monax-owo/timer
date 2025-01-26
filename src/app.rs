@@ -29,7 +29,7 @@ pub struct App {
   pub notification: Notification,
   // config
   #[allow(unused)]
-  pub user_config: Config<UserConfig>,
+  pub config: Config<UserConfig>,
   // timer
   pub timer: timer::Timer,
 }
@@ -119,7 +119,7 @@ impl App {
           return Task::done(Message::Notify);
         }
       }
-      Message::ChangeCheckRate(v) => self.user_config.check_rate = Duration::from_secs(v.into()),
+      Message::ChangeCheckRate(v) => self.config.check_rate = Duration::from_secs(v.into()),
       Message::ChangeTheme(theme) => self.current_theme = theme,
       Message::Pause(v) => {
         self.timer.enable = !v;
@@ -148,7 +148,7 @@ impl App {
         Event::Window(e) => Some(Message::WindowEvent((e, id))),
         _ => None,
       }),
-      time::every(self.user_config.check_rate).map(|_| Message::Tick),
+      time::every(self.config.check_rate).map(|_| Message::Tick),
       subscription::tray_listener().map(|e| match e {
         subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
         subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
@@ -194,7 +194,7 @@ impl App {
         .summary("Test Summary")
         .body("Test Body")
         .finalize(),
-      user_config,
+      config: user_config,
       timer: timer::Timer {
         enable: AUTO_START,
         ..Default::default()
