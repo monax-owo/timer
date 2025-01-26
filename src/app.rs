@@ -14,7 +14,7 @@ use notify_rust::Notification;
 use serde::{Deserialize, Serialize};
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
-  TrayIcon, TrayIconBuilder, TrayIconEvent,
+  MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
 use crate::{subscription, APPID, APP_NAME, AUTO_START};
@@ -112,7 +112,19 @@ impl App {
           _ => (),
         }
       }
-      Message::TrayIconEvent(e) => println!("event: {:#?}", e),
+      Message::TrayIconEvent(e) => {
+        println!("event: {:#?}", e);
+        match e {
+          TrayIconEvent::Click {
+            position,
+            rect,
+            button: MouseButton::Left,
+            button_state: MouseButtonState::Up,
+            ..
+          } => println!("pos: {:?}, rect: {:?}", position, rect),
+          _ => (),
+        }
+      }
       Message::Tick => {
         if self.timer.tick() {
           println!("elapsed!");
