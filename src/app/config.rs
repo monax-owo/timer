@@ -12,13 +12,13 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
     .expect("failed to get parent directory")
     .join(CONFIG_FILE);
   println!("{:#?}", config_file.to_string_lossy());
-  let file_path = if config_file.is_file() { Some(config_file) } else { None };
-  let mut config = Config::<T>::open(file_path);
+  let is_file = config_file.is_file();
+  let mut config = Config::<T>::open(Some(config_file));
   let res = config.load();
 
   if let Err(err) = res {
     match err {
-      configu::Error::PathNotSpecified => (),
+      configu::Error::PathNotSpecified if !is_file => (),
       _ => return Err(err),
     }
   }
