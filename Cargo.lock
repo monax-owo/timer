@@ -750,12 +750,13 @@ dependencies = [
 
 [[package]]
 name = "configu"
-version = "0.2.1"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efe897f8a89c4c216d30d63ba8265d389d0f615e66ce94bf64d32453f5ceff63"
+checksum = "85e841619ce499717a5b1870be552d12b7fec73398f2a040be1440a41567f08b"
 dependencies = [
  "anyhow",
  "serde",
+ "thiserror",
  "toml",
 ]
 
