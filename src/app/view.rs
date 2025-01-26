@@ -8,7 +8,11 @@ use iced::{
 use crate::app::{App, Message};
 
 pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
-  let check_rate_slider = slider(1..=60, app.check_rate.as_secs() as u32, Message::ChangeCheckRate);
+  let check_rate_slider = slider(
+    1..=60,
+    app.user_config.check_rate.as_secs() as u32,
+    Message::ChangeCheckRate,
+  );
 
   let next = match app.timer.next {
     Some(next) => format!("Next: {}", next.format("%H:%M:%S")),
@@ -24,7 +28,7 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
         .push(button(pause).on_press(Message::Pause(app.timer.enable)))
         .push(
           Row::new()
-            .push(text(app.check_rate.as_secs()))
+            .push(text(app.user_config.check_rate.as_secs()))
             .push(container(check_rate_slider.width(Length::Fill)).padding([0, 12]))
             .align_y(Center)
             .padding([0, 8]),

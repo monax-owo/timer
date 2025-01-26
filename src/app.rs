@@ -27,7 +27,6 @@ pub struct App {
   #[allow(unused)]
   pub task_tray: TrayIcon,
   pub notification: Notification,
-  pub check_rate: Duration,
   // config
   #[allow(unused)]
   pub user_config: Config<UserConfig>,
@@ -37,12 +36,14 @@ pub struct App {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct UserConfig {
-  test_value: i32,
+  pub check_rate: Duration,
 }
 
 impl Default for UserConfig {
   fn default() -> Self {
-    Self { test_value: 0 }
+    Self {
+      check_rate: Duration::from_secs(3),
+    }
   }
 }
 
@@ -118,7 +119,7 @@ impl App {
           return Task::done(Message::Notify);
         }
       }
-      Message::ChangeCheckRate(v) => self.check_rate = Duration::from_secs(v.into()),
+      Message::ChangeCheckRate(v) => self.user_config.check_rate = Duration::from_secs(v.into()),
       Message::ChangeTheme(theme) => self.current_theme = theme,
       Message::Pause(v) => {
         self.timer.enable = !v;
@@ -147,7 +148,7 @@ impl App {
         Event::Window(e) => Some(Message::WindowEvent((e, id))),
         _ => None,
       }),
-      time::every(self.check_rate).map(|_| Message::Tick),
+      time::every(self.user_config.check_rate).map(|_| Message::Tick),
       subscription::tray_listener().map(|e| match e {
         subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
         subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
@@ -193,7 +194,6 @@ impl App {
         .summary("Test Summary")
         .body("Test Body")
         .finalize(),
-      check_rate: Duration::from_secs(3),
       user_config,
       timer: timer::Timer {
         enable: AUTO_START,
