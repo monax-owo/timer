@@ -157,7 +157,7 @@ impl App {
 
   pub(crate) fn run() -> (App, Task<Message>) {
     // config
-    let user_config = config::config::<UserConfig>();
+    let user_config = config::config::<UserConfig>().expect("failed to initialize config");
     dbg!((*user_config).clone());
     // config
 
