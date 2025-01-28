@@ -114,15 +114,15 @@ impl App {
       }
       Message::TrayIconEvent(e) => {
         println!("event: {:#?}", e);
-        match e {
-          TrayIconEvent::Click {
-            position,
-            rect,
-            button: MouseButton::Left,
-            button_state: MouseButtonState::Up,
-            ..
-          } => println!("pos: {:?}, rect: {:?}", position, rect),
-          _ => (),
+        if let TrayIconEvent::Click {
+          position,
+          rect,
+          button: MouseButton::Left,
+          button_state: MouseButtonState::Up,
+          ..
+        } = e
+        {
+          println!("pos: {:?}, rect: {:?}", position, rect)
         }
       }
       Message::Tick => {
