@@ -2,7 +2,7 @@ use iced::{
   widget::{button, container, slider, text, Column, Row},
   window,
   Alignment::*,
-  Color, Element, Length,
+  Element, Length,
 };
 
 use crate::app::{App, Message};
@@ -20,7 +20,7 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
   {
     container(
       Column::new()
-      // TODO: button to square
+        // TODO: button to square
         .push(container(button("!")).align_x(End).width(Length::Fill))
         .push(text(next))
         .push(button(pause).on_press(Message::Pause(app.timer.enable)))
