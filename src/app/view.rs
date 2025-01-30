@@ -1,5 +1,5 @@
 use iced::{
-  widget::{button, container, slider, text, Column, Row},
+  widget::{button, container, slider, text, Column, Row, Space},
   window,
   Alignment::*,
   Element, Length,
@@ -20,23 +20,38 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
   {
     container(
       Column::new()
-        // TODO: button to square
-        .push(container(button("!")).align_x(End).width(Length::Fill))
-        .push(text(next))
-        .push(button(pause).on_press(Message::Pause(app.timer.enable)))
         .push(
-          Row::new()
-            .push(text(app.config.check_rate.as_secs()))
-            .push(container(check_rate_slider.width(Length::Fill)).padding([0, 12]))
-            .align_y(Center)
-            .padding([0, 8]),
+          container(
+            button(text("!").align_x(Center))
+              .height(Length::Fixed(32.0))
+              .width(Length::Fixed(32.0)),
+          )
+          .align_x(End)
+          .width(Length::Fill),
         )
-        .push(button("Notify").on_press(Message::Notify))
-        .align_x(Center)
-        .spacing(2.0),
+        .push(
+          container(
+            Column::new()
+              // TODO: button to square
+              .push(text(next))
+              .push(button(pause).on_press(Message::Pause(app.timer.enable)))
+              .push(
+                Row::new()
+                  .push(text(app.config.check_rate.as_secs()))
+                  .push(container(check_rate_slider.width(Length::Fill)).padding([0, 12]))
+                  .align_y(Center)
+                  .padding([0, 8]),
+              )
+              .push(button("Notify").on_press(Message::Notify))
+              .align_x(Center)
+              .spacing(4.0),
+          )
+          .align_y(Center)
+          .height(Length::Fill),
+        )
+        .push(Space::new(Length::Fill, Length::Fixed(32.0)))
+        .height(Length::Fill),
     )
-    .align_x(Center)
-    .align_y(Center)
     .height(Length::Fill)
     .width(Length::Fill)
     .padding(8.0)
