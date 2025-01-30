@@ -30,6 +30,16 @@ fn main() -> iced::Result {
     println!("successfully generate icons");
   }
 
+  #[cfg(target_os = "windows")]
+  (|| {
+    #[cfg(debug_assertions)]
+    if !std::env::args().any(|arg| arg == "--register") {
+      return;
+    }
+
+    todo!("registration");
+  })();
+
   iced::daemon(APP_NAME, App::update, App::view)
     .theme(App::theme)
     .subscription(App::subscription)
