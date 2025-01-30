@@ -2,7 +2,8 @@ use iced::{
   widget::{button, container, slider, text, Column, Row, Space},
   window,
   Alignment::*,
-  Element, Length,
+  Element,
+  Length::*,
 };
 
 use crate::app::{App, Message};
@@ -21,24 +22,19 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
     container(
       Column::new()
         .push(
-          container(
-            button(text("!").align_x(Center))
-              .height(Length::Fixed(32.0))
-              .width(Length::Fixed(32.0)),
-          )
-          .align_x(End)
-          .width(Length::Fill),
+          container(button(text("!").align_x(Center)).height(Fixed(32.0)).width(Fixed(32.0)))
+            .align_x(End)
+            .width(Fill),
         )
         .push(
           container(
             Column::new()
-              // TODO: button to square
               .push(text(next))
               .push(button(pause).on_press(Message::Pause(app.timer.enable)))
               .push(
                 Row::new()
                   .push(text(app.config.check_rate.as_secs()))
-                  .push(container(check_rate_slider.width(Length::Fill)).padding([0, 12]))
+                  .push(container(check_rate_slider.width(Fill)).padding([0, 12]))
                   .align_y(Center)
                   .padding([0, 8]),
               )
@@ -47,13 +43,13 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
               .spacing(4.0),
           )
           .align_y(Center)
-          .height(Length::Fill),
+          .height(Fill),
         )
-        .push(Space::new(Length::Fill, Length::Fixed(32.0)))
-        .height(Length::Fill),
+        .push(Space::new(Fill, Fixed(32.0)))
+        .height(Fill),
     )
-    .height(Length::Fill)
-    .width(Length::Fill)
+    .height(Fill)
+    .width(Fill)
     .padding(8.0)
   }
   .into()
