@@ -32,10 +32,24 @@ fn main() -> iced::Result {
 
   #[cfg(target_os = "windows")]
   (|| {
+    use windows_registry::*;
+
     #[cfg(debug_assertions)]
     if !std::env::args().any(|arg| arg == "--register") {
       return;
     }
+
+    let key = CURRENT_USER
+      .create(format!("SOFTWARE\\Classes\\AppUserModelId\\{}", APPID))
+      .unwrap();
+
+    let custom_activator = format!("{{{}}}", UUID.to_uppercase());
+    key.set_string("CustomActivator", &custom_activator).unwrap();
+
+    key.set_string("DisplayName", APP_NAME).unwrap();
+
+    // TODO: temp dir
+    // key.set_string("IconUri", temp_dir).unwrap();
 
     todo!("registration");
   })();
