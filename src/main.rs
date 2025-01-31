@@ -63,9 +63,10 @@ fn main() -> iced::Result {
     // TODO: temp dir
     // key.set_string("IconUri", temp_dir).unwrap();
 
-    app_user_model_id_key.remove_tree(APPID).unwrap();
-
-    todo!("registration");
+    // TODO: unregister
+    if false {
+      app_user_model_id_key.remove_tree(APPID).unwrap();
+    }
   })();
 
   iced::daemon(APP_NAME, App::update, App::view)
