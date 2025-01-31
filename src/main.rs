@@ -39,17 +39,20 @@ fn main() -> iced::Result {
       return;
     }
 
-    let key = CURRENT_USER
-      .create(format!("SOFTWARE\\Classes\\AppUserModelId\\{}", APPID))
-      .unwrap();
+    const APP_USER_MODEL_ID: &str = "SOFTWARE\\Classes\\AppUserModelId";
+
+    let app_user_model_id_key = CURRENT_USER.open(APP_USER_MODEL_ID).unwrap();
+    let app_id = app_user_model_id_key.create(APPID).unwrap();
 
     let custom_activator = format!("{{{}}}", UUID.to_uppercase());
-    key.set_string("CustomActivator", &custom_activator).unwrap();
+    app_id.set_string("CustomActivator", &custom_activator).unwrap();
 
-    key.set_string("DisplayName", APP_NAME).unwrap();
+    app_id.set_string("DisplayName", APP_NAME).unwrap();
 
     // TODO: temp dir
     // key.set_string("IconUri", temp_dir).unwrap();
+
+    app_user_model_id_key.remove_tree(APPID).unwrap();
 
     todo!("registration");
   })();
