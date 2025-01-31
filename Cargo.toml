@@ -6,6 +6,7 @@ resolver = "2"
 
 [dependencies]
 chrono = "0.4.39"
+clap = "4.5.27"
 configu = "0.3.0"
 iced = { version = "0.13.1", features = ["tokio"] }
 icon = { version = "0.1.0", path = "crates/icon" }
