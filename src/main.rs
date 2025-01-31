@@ -4,6 +4,7 @@ mod app;
 mod subscription;
 
 use app::App;
+use clap::Parser;
 use iced::window;
 
 // pub(crate) const APPID: &str = "com.squirrel.Discord.Discord";
@@ -13,9 +14,19 @@ pub(crate) const UUID: &str = "b5d7e61b-dbcc-4f57-9aba-64908ce0111a";
 pub(crate) const APP_NAME: &str = "Simple Timer";
 pub(crate) const AUTO_START: bool = false;
 
+#[derive(Parser, Debug)]
+struct Args {
+  #[arg(short, long)]
+  gen_icons: bool,
+  #[arg(short, long)]
+  register: bool,
+}
+
 fn main() -> iced::Result {
+  let args = Args::parse();
+
   #[cfg(debug_assertions)]
-  if std::env::args().any(|arg| arg == "--gen-icons") {
+  if args.gen_icons {
     println!("generating icons...");
     let assets_dir = std::env::current_dir().unwrap().join("assets");
     let input = assets_dir.join("icon.png");
@@ -35,7 +46,7 @@ fn main() -> iced::Result {
     use windows_registry::*;
 
     #[cfg(debug_assertions)]
-    if !std::env::args().any(|arg| arg == "--register") {
+    if !args.register {
       return;
     }
 
