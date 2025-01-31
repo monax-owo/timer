@@ -11,7 +11,7 @@ pub(crate) const APPID: &str = "io.github.monax-owo.timer";
 #[allow(unused)]
 pub(crate) const UUID: &str = "b5d7e61b-dbcc-4f57-9aba-64908ce0111a";
 pub(crate) const APP_NAME: &str = "Simple Timer";
-pub(crate) const AUTO_START: bool = true;
+pub(crate) const AUTO_START: bool = false;
 
 fn main() -> iced::Result {
   #[cfg(debug_assertions)]
