@@ -4,7 +4,6 @@ use iced::{
   window::{self, settings::PlatformSpecific},
   Task,
 };
-use notify_rust::Notification;
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{config::ConfigEvent, App, Message};
