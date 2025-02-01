@@ -93,8 +93,6 @@ impl App {
             .chain(window::change_mode(id, window::Mode::Windowed))
             .chain(window::gain_focus(id));
         } else {
-          println!("window created");
-
           let (id, open) = window::open(window::Settings {
             size: [600.0, 400.0].into(),
             resizable: false,
