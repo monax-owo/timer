@@ -8,6 +8,7 @@ use crate::{APPID, APP_NAME};
 pub struct NotificationLike {
   pub appname: String,
   pub summary: String,
+  pub subtitle: Option<String>,
   pub body: String,
   pub icon: String,
 
@@ -29,6 +30,7 @@ impl Default for NotificationLike {
       appname: APP_NAME.to_owned(),
       summary: "Elapsed now".to_owned(),
       app_id: APPID.to_owned(),
+      subtitle: None,
       body: String::default(),
       icon: String::default(),
       sound_name: None,
@@ -43,6 +45,7 @@ impl From<NotificationLike> for Notification {
     let mut notification = Notification::new();
     notification.appname = value.appname;
     notification.summary = value.summary;
+    notification.subtitle = value.subtitle;
     notification.body = value.body;
     notification.icon = value.icon;
 
