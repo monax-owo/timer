@@ -14,13 +14,12 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
   println!("{:#?}", config_file.to_string_lossy());
   let is_file = config_file.is_file();
   let mut config = Config::<T>::open(Some(config_file));
-  let res = config.load();
 
-  if let Err(err) = res {
-    match err {
-      configu::Error::PathNotSpecified if !is_file => (),
-      _ => return Err(err),
-    }
+  if is_file {
+    config.load()?;
+  } else {
+    *config = T::default();
   }
+
   Ok(config)
 }
