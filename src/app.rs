@@ -113,6 +113,7 @@ impl App {
         Self::QUIT_ID => return iced::exit(),
         _ => (),
       },
+      #[allow(clippy::single_match)]
       Message::TrayIconEvent(e) => match e {
         TrayIconEvent::Click {
           button: MouseButton::Left,
