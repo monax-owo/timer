@@ -38,7 +38,7 @@ impl From<NotificationLike> for Notification {
       notification.app_id(&v);
     }
 
-    dbg!(&notification);
+    notification.timeout(value.timeout);
 
     notification.finalize()
   }
