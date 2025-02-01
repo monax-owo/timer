@@ -29,12 +29,12 @@ impl Default for NotificationLike {
     Self {
       appname: APP_NAME.to_owned(),
       summary: "Elapsed now".to_owned(),
-      app_id: APPID.to_owned(),
       subtitle: None,
       body: String::default(),
       icon: String::default(),
       sound_name: None,
       path_to_image: None,
+      app_id: APPID.to_owned(),
       timeout: TimeoutLike::default(),
     }
   }
