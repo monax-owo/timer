@@ -1,4 +1,5 @@
 mod config;
+mod notification;
 mod timer;
 mod view;
 
@@ -10,6 +11,7 @@ use iced::{
   window::{self, settings::PlatformSpecific},
   Element, Event, Subscription, Task, Theme,
 };
+use notification::NotificationLike;
 use notify_rust::Notification;
 use serde::{Deserialize, Serialize};
 use tray_icon::{
@@ -37,12 +39,14 @@ pub struct App {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct UserConfig {
   pub check_rate: Duration,
+  pub notification: NotificationLike,
 }
 
 impl Default for UserConfig {
   fn default() -> Self {
     Self {
       check_rate: Duration::from_secs(3),
+      notification: NotificationLike::default(),
     }
   }
 }
