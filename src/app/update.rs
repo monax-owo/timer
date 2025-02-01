@@ -25,10 +25,11 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     },
     Message::WindowCreateRequested => {
       if let Some(id) = app.window {
-        // TODO: fix slow
-        return window::minimize(id, false)
-          .chain(window::change_mode(id, window::Mode::Windowed))
-          .chain(window::gain_focus(id));
+        return Task::batch([
+          window::minimize(id, false),
+          window::change_mode(id, window::Mode::Windowed),
+        ])
+        .chain(window::gain_focus(id));
       } else {
         let (id, open) = window::open(window::Settings {
           size: [600.0, 400.0].into(),
@@ -50,15 +51,18 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       _ => (),
     },
     #[allow(clippy::single_match)]
-    Message::TrayIconEvent(e) => match e {
-      TrayIconEvent::Click {
-        button: MouseButton::Left,
-        button_state: MouseButtonState::Up,
-        ..
-      } => return Task::done(Message::WindowCreateRequested),
-      // TODO: right click
-      _ => (),
-    },
+    Message::TrayIconEvent(e) => {
+      dbg!("icon event");
+      match e {
+        TrayIconEvent::Click {
+          button: MouseButton::Left,
+          button_state: MouseButtonState::Up,
+          ..
+        } => return Task::done(Message::WindowCreateRequested),
+        // TODO: right click
+        _ => (),
+      }
+    }
     Message::ConfigEvent(e) => match e {
       ConfigEvent::Save => println!("saved"),
       ConfigEvent::Load => println!("loaded"),
