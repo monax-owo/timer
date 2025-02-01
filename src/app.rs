@@ -88,6 +88,7 @@ impl App {
       },
       Message::WindowCreateRequested => {
         if let Some(id) = self.window {
+          // TODO: fix slow
           return window::minimize(id, false)
             .chain(window::change_mode(id, window::Mode::Windowed))
             .chain(window::gain_focus(id));
