@@ -1,7 +1,9 @@
 use notify_rust::{Notification, Timeout};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Debug, Clone, Default)]
+use crate::{APPID, APP_NAME};
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct NotificationLike {
   pub appname: String,
@@ -16,9 +18,24 @@ pub struct NotificationLike {
   pub path_to_image: Option<String>,
 
   #[cfg(target_os = "windows")]
-  pub app_id: Option<String>,
+  pub app_id: String,
 
   pub timeout: TimeoutLike,
+}
+
+impl Default for NotificationLike {
+  fn default() -> Self {
+    Self {
+      appname: APP_NAME.to_owned(),
+      summary: "Elapsed now".to_owned(),
+      app_id: APPID.to_owned(),
+      body: String::default(),
+      icon: String::default(),
+      sound_name: None,
+      path_to_image: None,
+      timeout: TimeoutLike::default(),
+    }
+  }
 }
 
 impl From<NotificationLike> for Notification {
@@ -35,9 +52,8 @@ impl From<NotificationLike> for Notification {
     if let Some(v) = value.path_to_image {
       notification.image_path(&v);
     }
-    if let Some(v) = value.app_id {
-      notification.app_id(&v);
-    }
+
+    notification.app_id(&value.app_id);
 
     notification.timeout(value.timeout);
 
