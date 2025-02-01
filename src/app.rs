@@ -1,22 +1,19 @@
 mod config;
 mod notification;
 mod timer;
+mod update;
 mod view;
 
 use std::time::Duration;
 
 use configu::Config;
-use iced::{
-  event, time,
-  window::{self, settings::PlatformSpecific},
-  Element, Event, Subscription, Task, Theme,
-};
+use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
 use notification::NotificationLike;
 use notify_rust::Notification;
 use serde::{Deserialize, Serialize};
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
-  MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent,
+  TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
 use crate::{app::config::ConfigEvent, subscription, APPID, APP_NAME, AUTO_START};
@@ -73,79 +70,7 @@ impl App {
   pub const QUIT_ID: &str = "quit";
 
   pub(crate) fn update(&mut self, message: Message) -> Task<Message> {
-    match message {
-      Message::WindowEvent((e, id)) => match e {
-        window::Event::Opened { .. } => {
-          return Task::batch([
-            window::change_icon(id, crate::load_app_icon()),
-            Task::done(Message::Tick),
-          ])
-        }
-        window::Event::Closed => self.window = None,
-        // TODO
-        // window::Event::Focused => todo!(),
-        // window::Event::Unfocused => todo!(),
-        _ => (),
-      },
-      Message::WindowCreateRequested => {
-        if let Some(id) = self.window {
-          // TODO: fix slow
-          return window::minimize(id, false)
-            .chain(window::change_mode(id, window::Mode::Windowed))
-            .chain(window::gain_focus(id));
-        } else {
-          let (id, open) = window::open(window::Settings {
-            size: [600.0, 400.0].into(),
-            resizable: false,
-            transparent: true,
-            platform_specific: PlatformSpecific {
-              skip_taskbar: true,
-              ..Default::default()
-            },
-            ..Default::default()
-          });
-          self.window = Some(id);
-          return open.chain(window::gain_focus(id)).map(|_| Message::Tick);
-        }
-      }
-      Message::TrayMenuEvent(id) => match id.0.as_str() {
-        Self::SHOW_ID => return Task::done(Message::WindowCreateRequested),
-        Self::QUIT_ID => return iced::exit(),
-        _ => (),
-      },
-      #[allow(clippy::single_match)]
-      Message::TrayIconEvent(e) => match e {
-        TrayIconEvent::Click {
-          button: MouseButton::Left,
-          button_state: MouseButtonState::Up,
-          ..
-        } => return Task::done(Message::WindowCreateRequested),
-        // TODO: right click
-        _ => (),
-      },
-      Message::ConfigEvent(e) => match e {
-        ConfigEvent::Save => println!("saved"),
-        ConfigEvent::Load => println!("loaded"),
-      },
-      Message::Tick => {
-        if self.timer.tick() {
-          println!("elapsed!");
-          return Task::done(Message::Notify);
-        }
-      }
-      Message::ChangeCheckRate(v) => self.config.check_rate = Duration::from_secs(v.into()),
-      Message::ChangeTheme(theme) => self.current_theme = theme,
-      Message::Pause(v) => {
-        self.timer.enable = !v;
-        // if stopped
-        if v {
-          self.timer.next = None;
-        }
-        return Task::done(Message::Tick);
-      }
-      Message::Notify => self.notification.show().unwrap(),
-    }
-    Task::none()
+    update::update(self, message)
   }
 
   pub(crate) fn view(&self, id: window::Id) -> Element<Message> {
