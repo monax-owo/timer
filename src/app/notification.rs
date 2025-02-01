@@ -10,7 +10,7 @@ pub struct NotificationLike {
   pub summary: String,
   pub subtitle: Option<String>,
   pub body: String,
-  pub icon: String,
+  // pub icon: String,
 
   #[cfg(target_os = "windows")]
   pub sound_name: Option<String>,
@@ -31,7 +31,6 @@ impl Default for NotificationLike {
       summary: "Elapsed now".to_owned(),
       subtitle: None,
       body: String::default(),
-      icon: String::default(),
       sound_name: None,
       path_to_image: None,
       app_id: APPID.to_owned(),
@@ -47,7 +46,6 @@ impl From<NotificationLike> for Notification {
     notification.summary = value.summary;
     notification.subtitle = value.subtitle;
     notification.body = value.body;
-    notification.icon = value.icon;
 
     if let Some(v) = value.sound_name {
       notification.sound_name(&v);
