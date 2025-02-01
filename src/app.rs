@@ -108,27 +108,20 @@ impl App {
           return open.chain(window::gain_focus(id)).map(|_| Message::Tick);
         }
       }
-      Message::TrayMenuEvent(id) => {
-        println!("id: {:#?}", id);
-        match id.0.as_str() {
-          Self::SHOW_ID => return Task::done(Message::WindowCreateRequested),
-          Self::QUIT_ID => (),
-          _ => (),
-        }
-      }
-      Message::TrayIconEvent(e) => {
-        println!("event: {:#?}", e);
-        if let TrayIconEvent::Click {
-          position,
-          rect,
+      Message::TrayMenuEvent(id) => match id.0.as_str() {
+        Self::SHOW_ID => return Task::done(Message::WindowCreateRequested),
+        Self::QUIT_ID => return iced::exit(),
+        _ => (),
+      },
+      Message::TrayIconEvent(e) => match e {
+        TrayIconEvent::Click {
           button: MouseButton::Left,
           button_state: MouseButtonState::Up,
           ..
-        } = e
-        {
-          println!("pos: {:?}, rect: {:?}", position, rect)
-        }
-      }
+        } => return Task::done(Message::WindowCreateRequested),
+        // TODO: right click
+        _ => (),
+      },
       Message::Tick => {
         if self.timer.tick() {
           println!("elapsed!");
