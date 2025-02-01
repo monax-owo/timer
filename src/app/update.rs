@@ -13,7 +13,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::WindowEvent((e, id)) => match e {
       window::Event::Opened { .. } => {
         return Task::batch([
-          window::change_icon(id, crate::load_app_icon()),
+          window::change_icon(id, crate::util::icon::load_app_icon()),
           Task::done(Message::Tick),
         ])
       }

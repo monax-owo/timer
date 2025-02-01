@@ -111,7 +111,7 @@ impl App {
       .expect("failed to append tray items");
 
     let task_tray = TrayIconBuilder::new()
-      .with_icon(crate::load_tray_icon())
+      .with_icon(crate::util::icon::load_tray_icon())
       .with_menu_on_left_click(false)
       .with_menu(Box::new(menu))
       .with_title(APP_NAME)
