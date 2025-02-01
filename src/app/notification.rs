@@ -2,6 +2,7 @@ use notify_rust::{Notification, Timeout};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Debug, Clone, Default)]
+#[serde(default)]
 pub struct NotificationLike {
   pub appname: String,
   pub summary: String,

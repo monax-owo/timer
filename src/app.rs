@@ -34,6 +34,7 @@ pub struct App {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
+#[serde(default)]
 pub struct UserConfig {
   pub check_rate: Duration,
   pub notification: NotificationLike,
