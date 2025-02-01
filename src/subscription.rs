@@ -21,7 +21,7 @@ pub fn tray_listener() -> Subscription<TrayEvent> {
 
 fn menu_listener() -> impl Stream<Item = TrayEvent> {
   const CONNECTION: usize = 2;
-  const TICK: u64 = 500;
+  const SLEEP_MS: u64 = 500;
 
   stream::channel(CONNECTION, |mut output| async move {
     let menu_event_receiver = MenuEvent::receiver();
@@ -31,14 +31,14 @@ fn menu_listener() -> impl Stream<Item = TrayEvent> {
         output.send(TrayEvent::MenuEvent(id)).await.unwrap();
       }
 
-      tokio::time::sleep(Duration::from_millis(TICK)).await;
+      tokio::time::sleep(Duration::from_millis(SLEEP_MS)).await;
     }
   })
 }
 
 fn icon_listener() -> impl Stream<Item = TrayEvent> {
   const CONNECTION: usize = 8;
-  const TICK: u64 = 200;
+  const SLEEP_MS: u64 = 200;
 
   stream::channel(CONNECTION, |mut output| async move {
     let icon_event_receiver = TrayIconEvent::receiver();
@@ -51,7 +51,7 @@ fn icon_listener() -> impl Stream<Item = TrayEvent> {
         }
       }
 
-      tokio::time::sleep(Duration::from_millis(TICK)).await;
+      tokio::time::sleep(Duration::from_millis(SLEEP_MS)).await;
     }
   })
 }
