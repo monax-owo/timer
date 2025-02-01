@@ -38,7 +38,7 @@ fn menu_listener() -> impl Stream<Item = TrayEvent> {
 
 fn icon_listener() -> impl Stream<Item = TrayEvent> {
   const CONNECTION: usize = 8;
-  const SLEEP_MS: u64 = 200;
+  const SLEEP_MS: u64 = 100;
 
   stream::channel(CONNECTION, |mut output| async move {
     let icon_event_receiver = TrayIconEvent::receiver();
