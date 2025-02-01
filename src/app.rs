@@ -19,7 +19,7 @@ use tray_icon::{
   MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
-use crate::{subscription, APPID, APP_NAME, AUTO_START};
+use crate::{app::config::ConfigEvent, subscription, APPID, APP_NAME, AUTO_START};
 
 pub struct App {
   // app
@@ -57,6 +57,7 @@ pub enum Message {
   WindowCreateRequested,
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
+  ConfigEvent(ConfigEvent),
   Tick,
   ChangeCheckRate(u32),
   // TODO
@@ -121,6 +122,10 @@ impl App {
         } => return Task::done(Message::WindowCreateRequested),
         // TODO: right click
         _ => (),
+      },
+      Message::ConfigEvent(e) => match e {
+        ConfigEvent::Save => println!("saved"),
+        ConfigEvent::Load => println!("loaded"),
       },
       Message::Tick => {
         if self.timer.tick() {
@@ -211,6 +216,12 @@ impl App {
     };
     // state
 
-    (app_state, Task::done(Message::WindowCreateRequested))
+    (
+      app_state,
+      Task::batch([
+        Task::done(Message::WindowCreateRequested),
+        Task::done(Message::ConfigEvent(ConfigEvent::Load)),
+      ]),
+    )
   }
 }

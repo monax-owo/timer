@@ -5,6 +5,12 @@ use serde::{Deserialize, Serialize};
 
 const CONFIG_FILE: &str = "timer.toml";
 
+#[derive(Debug, Clone)]
+pub enum ConfigEvent {
+  Save,
+  Load,
+}
+
 pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Result<Config<T>, configu::Error> {
   let config_file = current_exe()
     .expect("failed to get current exe")
