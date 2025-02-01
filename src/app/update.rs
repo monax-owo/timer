@@ -4,6 +4,7 @@ use iced::{
   window::{self, settings::PlatformSpecific},
   Task,
 };
+use notify_rust::Notification;
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{config::ConfigEvent, App, Message};
@@ -64,8 +65,11 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
     }
     Message::ConfigEvent(e) => match e {
-      ConfigEvent::Save => println!("saved"),
-      ConfigEvent::Load => println!("loaded"),
+      ConfigEvent::Save => println!("config saved"),
+      ConfigEvent::Load => {
+        println!("config loaded");
+        app.notification = app.config.notification.clone().into();
+      }
     },
     Message::Tick => {
       if app.timer.tick() {
