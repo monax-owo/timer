@@ -49,9 +49,7 @@ pub enum TimeoutLike {
   #[default]
   Default,
   Never,
-  Milliseconds {
-    milliseconds: u32,
-  },
+  Milliseconds(u32),
 }
 
 impl From<TimeoutLike> for Timeout {
@@ -59,7 +57,7 @@ impl From<TimeoutLike> for Timeout {
     match value {
       TimeoutLike::Default => Timeout::Default,
       TimeoutLike::Never => Timeout::Never,
-      TimeoutLike::Milliseconds { milliseconds: ms } => Timeout::Milliseconds(ms),
+      TimeoutLike::Milliseconds(ms) => Timeout::Milliseconds(ms),
     }
   }
 }
