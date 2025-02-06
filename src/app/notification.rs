@@ -11,7 +11,6 @@ pub struct NotificationLike {
   pub subtitle: Option<String>,
   pub body: String,
   // pub icon: String,
-
   #[cfg(target_os = "windows")]
   pub sound_name: Option<String>,
 
@@ -61,6 +60,7 @@ impl From<NotificationLike> for Notification {
     notification.finalize()
   }
 }
+
 #[derive(Deserialize, Serialize, Debug, Default, Copy, Clone, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum TimeoutLike {
