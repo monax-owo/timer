@@ -1,5 +1,4 @@
 mod config;
-mod notification;
 mod timer;
 mod update;
 mod view;
@@ -8,9 +7,7 @@ use std::time::Duration;
 
 use configu::Config;
 use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
-use notification::NotificationLike;
 use notify_rust::Notification;
-use serde::{Deserialize, Serialize};
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
   TrayIcon, TrayIconBuilder, TrayIconEvent,
@@ -28,25 +25,9 @@ pub struct App {
   pub notification: Notification,
   // config
   #[allow(unused)]
-  pub config: Config<UserConfig>,
+  pub config: Config<config::UserConfig>,
   // timer
   pub timer: timer::Timer,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(default)]
-pub struct UserConfig {
-  pub check_rate: Duration,
-  pub notification: NotificationLike,
-}
-
-impl Default for UserConfig {
-  fn default() -> Self {
-    Self {
-      check_rate: Duration::from_secs(3),
-      notification: NotificationLike::default(),
-    }
-  }
 }
 
 #[derive(Debug, Clone)]
@@ -99,7 +80,7 @@ impl App {
 
   pub(crate) fn run() -> (App, Task<Message>) {
     // config
-    let user_config = config::config::<UserConfig>().expect("failed to initialize config");
+    let user_config = config::config::<config::UserConfig>().expect("failed to initialize config");
     dbg!((*user_config).clone());
     // config
 
