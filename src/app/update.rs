@@ -77,6 +77,9 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
     }
     Message::ChangeCheckRate(v) => app.config.check_rate = Duration::from_secs(v.into()),
+    Message::ChangeDuration(duration) => {
+      dbg!(duration);
+    }
     Message::ChangeTheme(theme) => app.current_theme = theme,
     Message::Pause(v) => {
       app.timer.enable = !v;

@@ -58,6 +58,7 @@ pub enum Message {
   ConfigEvent(ConfigEvent),
   Tick,
   ChangeCheckRate(u32),
+  ChangeDuration(Duration),
   // TODO
   #[allow(unused)]
   ChangeTheme(Theme),
