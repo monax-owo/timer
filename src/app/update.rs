@@ -68,6 +68,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       ConfigEvent::Load => {
         println!("config loaded");
         app.notification = app.config.notification.clone().into();
+        app.timer.duration = app.config.duration.clone().into();
       }
     },
     Message::Tick => {
