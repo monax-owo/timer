@@ -108,14 +108,7 @@ impl App {
       window: None,
       current_theme: Theme::Dark,
       task_tray,
-      notification: Notification::new()
-        .appname(APP_NAME)
-        .app_id(APPID)
-        // TODO: tempdir
-        // .image_path(path)
-        .summary("Test Summary")
-        .body("Test Body")
-        .finalize(),
+      notification: Notification::default(),
       config: user_config,
       timer: timer::Timer {
         enable: AUTO_START,
