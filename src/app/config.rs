@@ -35,11 +35,20 @@ impl Default for UserConfig {
 // Hours, Minutes, Seconds
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
-#[derive(Default)]
 pub struct Hms {
   hour: u8,
   min: u8,
   sec: u8,
+}
+
+impl Default for Hms {
+  fn default() -> Self {
+    Self {
+      hour: 0,
+      min: 30,
+      sec: 0,
+    }
+  }
 }
 
 impl From<Hms> for Duration {
