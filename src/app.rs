@@ -5,6 +5,7 @@ mod view;
 
 use std::time::Duration;
 
+use config::{Hms, NotificationLike};
 use configu::Config;
 use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
 use notify_rust::Notification;
@@ -108,18 +109,15 @@ impl App {
       window: None,
       current_theme: Theme::Dark,
       task_tray,
-      notification: Notification::default(),
+      notification: NotificationLike::default().into(),
       config,
-      timer: timer::Timer::default(),
+      timer: timer::Timer {
+        duration: Hms::default().into(),
+        ..Default::default()
+      },
     };
     // state
 
-    (
-      app_state,
-      Task::batch([
-        Task::done(Message::WindowCreateRequested),
-        Task::done(Message::ConfigEvent(ConfigEvent::Load)),
-      ]),
-    )
+    (app_state, Task::done(Message::WindowCreateRequested))
   }
 }
