@@ -13,7 +13,7 @@ use tray_icon::{
   TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
-use crate::{app::config::ConfigEvent, subscription, APP_NAME, AUTO_START};
+use crate::{app::config::ConfigEvent, subscription, APP_NAME};
 
 pub struct App {
   // app
@@ -110,6 +110,7 @@ impl App {
       task_tray,
       notification: Notification::default(),
       config,
+      timer: timer::Timer::default(),
     };
     // state
 
