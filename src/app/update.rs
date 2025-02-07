@@ -6,7 +6,10 @@ use iced::{
 };
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
-use super::{config::ConfigEvent, App, Message};
+use super::{
+  config::{load, ConfigEvent},
+  App, Message,
+};
 
 pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
   match message {
@@ -66,9 +69,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::ConfigEvent(e) => match e {
       ConfigEvent::Save => println!("config saved"),
       ConfigEvent::Load => {
-        println!("config loaded");
-        app.notification = app.config.notification.clone().into();
-        app.timer.duration = app.config.duration.clone().into();
+        load(app);
       }
     },
     Message::Tick => {
