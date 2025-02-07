@@ -37,17 +37,20 @@ pub enum Page {
 
 #[derive(Debug, Clone)]
 pub enum Message {
+  // window
   WindowEvent((window::Event, window::Id)),
   WindowCreateRequested,
+
   // tray
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
+
   // config
   ConfigEvent(ConfigEvent),
+
   Tick,
   ChangeCheckRate(u32),
   ChangeDuration(Duration),
-  // TODO
   ChangeTheme(Theme),
   // true = stop, false = start
   Pause(bool),
