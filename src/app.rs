@@ -19,16 +19,12 @@ use crate::{app::config::ConfigEvent, subscription, APP_NAME};
 pub struct App {
   // ui
   pub current_theme: Theme,
-  #[allow(unused)]
   pub page: Page,
   // app
-  #[allow(unused)]
   pub window: Option<window::Id>,
-  #[allow(unused)]
   pub task_tray: TrayIcon,
   pub notification: Notification,
   // config
-  #[allow(unused)]
   pub config: Config<config::UserConfig>,
   // timer
   pub timer: timer::Timer,
@@ -43,14 +39,15 @@ pub enum Page {
 pub enum Message {
   WindowEvent((window::Event, window::Id)),
   WindowCreateRequested,
+  // tray
   TrayMenuEvent(MenuId),
   TrayIconEvent(TrayIconEvent),
+  // config
   ConfigEvent(ConfigEvent),
   Tick,
   ChangeCheckRate(u32),
   ChangeDuration(Duration),
   // TODO
-  #[allow(unused)]
   ChangeTheme(Theme),
   // true = stop, false = start
   Pause(bool),
@@ -90,7 +87,7 @@ impl App {
   pub(crate) fn run() -> (App, Task<Message>) {
     // config
     let config = config::config::<config::UserConfig>().expect("failed to initialize config");
-    dbg!((*config).clone());
+    dbg!(&config);
     // config
 
     // task tray
