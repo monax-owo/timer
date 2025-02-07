@@ -37,7 +37,7 @@ impl Default for Timer {
   fn default() -> Self {
     Self {
       enable: true,
-      duration: Duration::from_secs(30),
+      duration: Duration::from_secs(60 * 30),
       next: None,
     }
   }
