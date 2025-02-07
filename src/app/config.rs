@@ -42,7 +42,6 @@ pub struct Hms {
   sec: u8,
 }
 
-
 impl From<Hms> for Duration {
   fn from(value: Hms) -> Self {
     Self::from_secs(value.hour as u64 * 3600 + value.min as u64 * 60 + value.sec as u64)
