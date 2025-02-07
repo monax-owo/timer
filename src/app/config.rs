@@ -18,7 +18,7 @@ pub enum ConfigEvent {
 #[serde(default)]
 pub struct UserConfig {
   pub check_rate: Duration,
-  pub duration: HMS,
+  pub duration: Hms,
   pub notification: NotificationLike,
 }
 
@@ -26,7 +26,7 @@ impl Default for UserConfig {
   fn default() -> Self {
     Self {
       check_rate: Duration::from_secs(3),
-      duration: HMS::default(),
+      duration: Hms::default(),
       notification: NotificationLike::default(),
     }
   }
@@ -35,24 +35,16 @@ impl Default for UserConfig {
 // Hours, Minutes, Seconds
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
-pub struct HMS {
+#[derive(Default)]
+pub struct Hms {
   hour: u8,
   min: u8,
   sec: u8,
 }
 
-impl Default for HMS {
-  fn default() -> Self {
-    Self {
-      hour: Default::default(),
-      min: Default::default(),
-      sec: Default::default(),
-    }
-  }
-}
 
-impl From<HMS> for Duration {
-  fn from(value: HMS) -> Self {
+impl From<Hms> for Duration {
+  fn from(value: Hms) -> Self {
     Self::from_secs(value.hour as u64 * 3600 + value.min as u64 * 60 + value.sec as u64)
   }
 }

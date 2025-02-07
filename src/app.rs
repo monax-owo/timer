@@ -13,7 +13,7 @@ use tray_icon::{
   TrayIcon, TrayIconBuilder, TrayIconEvent,
 };
 
-use crate::{app::config::ConfigEvent, subscription, APPID, APP_NAME, AUTO_START};
+use crate::{app::config::ConfigEvent, subscription, APP_NAME, AUTO_START};
 
 pub struct App {
   // app
