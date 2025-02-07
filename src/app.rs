@@ -80,8 +80,8 @@ impl App {
 
   pub(crate) fn run() -> (App, Task<Message>) {
     // config
-    let user_config = config::config::<config::UserConfig>().expect("failed to initialize config");
-    dbg!((*user_config).clone());
+    let config = config::config::<config::UserConfig>().expect("failed to initialize config");
+    dbg!((*config).clone());
     // config
 
     // task tray
@@ -109,11 +109,7 @@ impl App {
       current_theme: Theme::Dark,
       task_tray,
       notification: Notification::default(),
-      config: user_config,
-      timer: timer::Timer {
-        enable: AUTO_START,
-        ..Default::default()
-      },
+      config,
     };
     // state
 
