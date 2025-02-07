@@ -17,8 +17,11 @@ use tray_icon::{
 use crate::{app::config::ConfigEvent, subscription, APP_NAME};
 
 pub struct App {
-  // app
+  // ui
   pub current_theme: Theme,
+  #[allow(unused)]
+  pub page: Page,
+  // app
   #[allow(unused)]
   pub window: Option<window::Id>,
   #[allow(unused)]
@@ -29,6 +32,11 @@ pub struct App {
   pub config: Config<config::UserConfig>,
   // timer
   pub timer: timer::Timer,
+}
+
+pub enum Page {
+  Main,
+  Config,
 }
 
 #[derive(Debug, Clone)]
@@ -108,6 +116,7 @@ impl App {
     let app_state = App {
       window: None,
       current_theme: Theme::Dark,
+      page: Page::Main,
       task_tray,
       notification: NotificationLike::default().into(),
       config,

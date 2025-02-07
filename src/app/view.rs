@@ -8,6 +8,8 @@ use iced::{
 
 use crate::app::{App, Message};
 
+use super::Page;
+
 pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
   let check_rate_slider = slider(1..=60, app.config.check_rate.as_secs() as u32, Message::ChangeCheckRate);
 
@@ -27,8 +29,8 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
             .width(Fill),
         )
         .push(
-          container(
-            Column::new()
+          container(match app.page {
+            Page::Main => Column::new()
               .push(text(next))
               .push(button(pause).on_press(Message::Pause(app.timer.enable)))
               .push(
@@ -41,7 +43,8 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
               .push(button("Notify").on_press(Message::Notify))
               .align_x(Center)
               .spacing(4.0),
-          )
+            Page::Config => Column::new(),
+          })
           .align_y(Center)
           .height(Fill),
         )
