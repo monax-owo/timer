@@ -11,6 +11,7 @@ pub(crate) mod icon {
     const APP_ICON: &[u8] = include_bytes!("../assets/icons/128x128.png");
 
     let (rgba, width, height) = load_image(APP_ICON);
+
     iced::window::icon::from_rgba(rgba, width, height).expect("Failed to set app icon")
   }
 

@@ -55,7 +55,6 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     },
     #[allow(clippy::single_match)]
     Message::TrayIconEvent(e) => {
-      dbg!("icon event");
       match e {
         TrayIconEvent::Click {
           button: MouseButton::Left,

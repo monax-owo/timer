@@ -16,8 +16,8 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
         )
         .push(
           container(match app.page {
-            Page::Main => main::view(&app),
-            Page::Config => config::view(&app),
+            Page::Main => main::view(app),
+            Page::Config => config::view(app),
           })
           .align_y(Center)
           .height(Fill),
