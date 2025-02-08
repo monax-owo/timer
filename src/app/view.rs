@@ -21,16 +21,14 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
               .height(32)
               .width(32),
           )
-          .align_x(End)
-          .width(Fill),
+          .align_right(Fill),
         )
         .push(
           container(match app.page {
             Page::Main => main::view(app),
             Page::Config => config::view(app),
           })
-          .align_y(Center)
-          .height(Fill),
+          .center_y(Fill),
         )
         .push(Space::new(Fill, 32))
         .height(Fill),
