@@ -54,8 +54,8 @@ impl Hms {
     second: u8::MAX,
   };
 
-  pub fn new() -> Self {
-    Self::ZERO
+  pub fn new(hour: u8, minute: u8, second: u8) -> Self {
+    Self { hour, minute, second }
   }
 
   pub fn seconds(mut self, seconds: u8) -> Self {
