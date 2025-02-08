@@ -173,7 +173,7 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
     .parent()
     .expect("failed to get parent directory")
     .join(CONFIG_FILE);
-  println!("{:#?}", config_file.to_string_lossy());
+
   let is_file = config_file.is_file();
   let mut config = Config::<T>::open(Some(config_file));
 
@@ -190,9 +190,6 @@ pub(crate) fn load(app: &mut super::App) {
   println!("config loaded");
 
   app.config.load().unwrap();
-
-  let config = &app.config;
-
-  app.notification = config.notification.clone().into();
-  app.timer.duration = (&config.duration).into();
+  app.notification = app.config.notification.clone().into();
+  app.timer.duration = (&app.config.duration).into();
 }
