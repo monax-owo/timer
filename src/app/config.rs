@@ -36,22 +36,22 @@ impl Default for UserConfig {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct Hms {
+  second: u8,
+  minute: u8,
   hour: u8,
-  min: u8,
-  sec: u8,
 }
 
 impl Hms {
   pub const ZERO: Self = Self {
     hour: 0,
-    min: 0,
-    sec: 0,
+    minute: 0,
+    second: 0,
   };
 
   pub const MAX: Self = Self {
     hour: u8::MAX,
-    min: u8::MAX,
-    sec: u8::MAX,
+    minute: u8::MAX,
+    second: u8::MAX,
   };
 
   pub fn new() -> Self {
@@ -59,12 +59,12 @@ impl Hms {
   }
 
   pub fn seconds(mut self, seconds: u8) -> Self {
-    self.sec = seconds;
+    self.second = seconds;
     self
   }
 
   pub fn minutes(mut self, minutes: u8) -> Self {
-    self.min = minutes;
+    self.minute = minutes;
     self
   }
 
@@ -82,7 +82,7 @@ impl Default for Hms {
 
 impl From<Hms> for Duration {
   fn from(value: Hms) -> Self {
-    Self::from_secs(value.hour as u64 * 3600 + value.min as u64 * 60 + value.sec as u64)
+    Self::from_secs(value.hour as u64 * 3600 + value.minute as u64 * 60 + value.second as u64)
   }
 }
 
