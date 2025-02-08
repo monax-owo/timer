@@ -43,15 +43,15 @@ pub struct Hms {
 
 impl Hms {
   pub const ZERO: Self = Self {
-    hour: 0,
-    minute: 0,
     second: 0,
+    minute: 0,
+    hour: 0,
   };
 
   pub const MAX: Self = Self {
-    hour: u8::MAX,
-    minute: u8::MAX,
     second: u8::MAX,
+    minute: u8::MAX,
+    hour: u8::MAX,
   };
 
   pub fn new() -> Self {
