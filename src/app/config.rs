@@ -32,7 +32,6 @@ impl Default for UserConfig {
   }
 }
 
-// Hours, Minutes, Seconds
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct Hms {

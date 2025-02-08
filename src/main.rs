@@ -7,7 +7,6 @@ mod util;
 use app::App;
 use clap::Parser;
 
-// pub(crate) const APPID: &str = "com.squirrel.Discord.Discord";
 pub(crate) const APPID: &str = "io.github.monax-owo.timer";
 #[allow(unused)]
 pub(crate) const UUID: &str = "b5d7e61b-dbcc-4f57-9aba-64908ce0111a";

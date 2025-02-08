@@ -20,12 +20,15 @@ pub struct App {
   // ui
   pub current_theme: Theme,
   pub page: Page,
+
   // app
   pub window: Option<window::Id>,
   pub task_tray: TrayIcon,
   pub notification: Notification,
+
   // config
   pub config: Config<config::UserConfig>,
+
   // timer
   pub timer: timer::Timer,
 }
