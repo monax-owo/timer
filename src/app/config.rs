@@ -25,7 +25,7 @@ pub struct UserConfig {
 impl Default for UserConfig {
   fn default() -> Self {
     Self {
-      check_rate: Hms::ZERO.seconds(3),
+      check_rate: Hms::ZERO.second(3),
       duration: Hms::default(),
       notification: NotificationLike::default(),
     }
@@ -58,17 +58,17 @@ impl Hms {
     Self { hour, minute, second }
   }
 
-  pub fn seconds(mut self, seconds: u8) -> Self {
+  pub fn second(mut self, seconds: u8) -> Self {
     self.second = seconds;
     self
   }
 
-  pub fn minutes(mut self, minutes: u8) -> Self {
+  pub fn minute(mut self, minutes: u8) -> Self {
     self.minute = minutes;
     self
   }
 
-  pub fn hours(mut self, hours: u8) -> Self {
+  pub fn hour(mut self, hours: u8) -> Self {
     self.hour = hours;
     self
   }
@@ -76,7 +76,7 @@ impl Hms {
 
 impl Default for Hms {
   fn default() -> Self {
-    Self::ZERO.minutes(30)
+    Self::ZERO.minute(30)
   }
 }
 
