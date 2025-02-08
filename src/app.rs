@@ -119,18 +119,23 @@ impl App {
     // task tray
 
     // state
-    let app_state = App {
+    let notification = config.notification.clone().into();
+    let duration = (&config.duration).into();
+
+    let mut app_state = App {
       window: None,
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,
-      notification: NotificationLike::default().into(),
+      notification,
       config,
       timer: timer::Timer {
-        duration: Hms::default().into(),
+        duration,
         ..Default::default()
       },
     };
+
+    config::load(&mut app_state);
     // state
 
     (app_state, Task::done(Message::WindowCreateRequested))
