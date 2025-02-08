@@ -33,7 +33,6 @@ impl Default for UserConfig {
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-#[serde(default)]
 pub struct Hms {
   pub hour: u8,
   pub minute: u8,
