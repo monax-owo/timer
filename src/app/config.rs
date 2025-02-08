@@ -36,9 +36,9 @@ impl Default for UserConfig {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct Hms {
-  second: u8,
-  minute: u8,
-  hour: u8,
+  pub second: u8,
+  pub minute: u8,
+  pub hour: u8,
 }
 
 impl Hms {
