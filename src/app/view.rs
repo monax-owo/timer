@@ -6,13 +6,23 @@ use iced::{widget::*, window, Alignment::*, Element, Length::*};
 use crate::app::{App, Message, Page};
 
 pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
+  let page = match app.page {
+    Page::Main => Page::Config,
+    Page::Config => Page::Main,
+  };
+
   {
     container(
       Column::new()
         .push(
-          container(button(text("!").align_x(Center)).height(32).width(32))
-            .align_x(End)
-            .width(Fill),
+          container(
+            button(text("!").align_x(Center))
+              .on_press(Message::ChangePage(page))
+              .height(32)
+              .width(32),
+          )
+          .align_x(End)
+          .width(Fill),
         )
         .push(
           container(match app.page {

@@ -82,6 +82,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       dbg!(duration);
     }
     Message::ChangeTheme(theme) => app.current_theme = theme,
+    Message::ChangePage(page) => app.page = page,
     Message::Pause(v) => {
       app.timer.enable = !v;
       // if stopped

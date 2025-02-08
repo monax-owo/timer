@@ -54,6 +54,7 @@ pub enum Message {
   ChangeCheckRate(u32),
   ChangeDuration(Duration),
   ChangeTheme(Theme),
+  ChangePage(Page),
   // true = stop, false = start
   Pause(bool),
   Notify,
