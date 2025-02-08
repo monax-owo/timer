@@ -48,9 +48,7 @@ fn main() -> iced::Result {
       return;
     }
 
-    const APP_USER_MODEL_ID: &str = r"SOFTWARE\Classes\AppUserModelId";
-
-    let app_user_model_id_key = CURRENT_USER.open(APP_USER_MODEL_ID).unwrap();
+    let app_user_model_id_key = CURRENT_USER.open(r"SOFTWARE\Classes\AppUserModelId").unwrap();
     let app_id = app_user_model_id_key.create(APPID).unwrap();
 
     let custom_activator = format!("{{{}}}", UUID.to_uppercase());
