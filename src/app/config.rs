@@ -81,6 +81,12 @@ impl Default for Hms {
 
 impl From<Hms> for Duration {
   fn from(value: Hms) -> Self {
+    Self::from(&value)
+  }
+}
+
+impl From<&Hms> for Duration {
+  fn from(value: &Hms) -> Self {
     Self::from_secs(value.hour as u64 * 3600 + value.minute as u64 * 60 + value.second as u64)
   }
 }
@@ -186,5 +192,5 @@ pub(crate) fn load(app: &mut super::App) {
   let config = &app.config;
 
   app.notification = config.notification.clone().into();
-  app.timer.duration = config.duration.clone().into();
+  app.timer.duration = (&config.duration).into();
 }
