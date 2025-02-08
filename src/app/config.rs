@@ -41,13 +41,42 @@ pub struct Hms {
   sec: u8,
 }
 
+impl Hms {
+  pub const ZERO: Self = Self {
+    hour: 0,
+    min: 0,
+    sec: 0,
+  };
+
+  pub const MAX: Self = Self {
+    hour: u8::MAX,
+    min: u8::MAX,
+    sec: u8::MAX,
+  };
+
+  pub fn new() -> Self {
+    Self::ZERO
+  }
+
+  pub fn seconds(mut self, seconds: u8) -> Self {
+    self.sec = seconds;
+    self
+  }
+
+  pub fn minutes(mut self, minutes: u8) -> Self {
+    self.min = minutes;
+    self
+  }
+
+  pub fn hours(mut self, hours: u8) -> Self {
+    self.hour = hours;
+    self
+  }
+}
+
 impl Default for Hms {
   fn default() -> Self {
-    Self {
-      hour: 0,
-      min: 30,
-      sec: 0,
-    }
+    Self::new().minutes(30)
   }
 }
 
