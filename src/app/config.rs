@@ -57,18 +57,18 @@ impl Hms {
     Self { hour, minute, second }
   }
 
-  pub fn second(mut self, seconds: u8) -> Self {
-    self.second = seconds;
+  pub fn second(mut self, second: u8) -> Self {
+    self.second = second;
     self
   }
 
-  pub fn minute(mut self, minutes: u8) -> Self {
-    self.minute = minutes;
+  pub fn minute(mut self, minute: u8) -> Self {
+    self.minute = minute;
     self
   }
 
-  pub fn hour(mut self, hours: u8) -> Self {
-    self.hour = hours;
+  pub fn hour(mut self, hour: u8) -> Self {
+    self.hour = hour;
     self
   }
 }
