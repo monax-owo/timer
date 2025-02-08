@@ -36,22 +36,22 @@ impl Default for UserConfig {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct Hms {
-  pub second: u8,
-  pub minute: u8,
   pub hour: u8,
+  pub minute: u8,
+  pub second: u8,
 }
 
 impl Hms {
   pub const ZERO: Self = Self {
-    second: 0,
-    minute: 0,
     hour: 0,
+    minute: 0,
+    second: 0,
   };
 
   pub const MAX: Self = Self {
-    second: u8::MAX,
-    minute: u8::MAX,
     hour: u8::MAX,
+    minute: u8::MAX,
+    second: u8::MAX,
   };
 
   pub fn new() -> Self {
