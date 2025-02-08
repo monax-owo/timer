@@ -10,7 +10,7 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
     container(
       Column::new()
         .push(
-          container(button(text("!").align_x(Center)).height(Fixed(32.0)).width(Fixed(32.0)))
+          container(button(text("!").align_x(Center)).height(32).width(32))
             .align_x(End)
             .width(Fill),
         )
@@ -22,12 +22,12 @@ pub(crate) fn view(app: &App, _id: window::Id) -> Element<Message> {
           .align_y(Center)
           .height(Fill),
         )
-        .push(Space::new(Fill, Fixed(32.0)))
+        .push(Space::new(Fill, 32))
         .height(Fill),
     )
     .height(Fill)
     .width(Fill)
-    .padding(8.0)
+    .padding(8)
   }
   .into()
 }

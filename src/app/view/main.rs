@@ -24,7 +24,7 @@ pub(super) fn view(app: &App) -> Element<Message> {
       )
       .push(button("Notify").on_press(Message::Notify))
       .align_x(Center)
-      .spacing(4.0)
+      .spacing(4)
   }
   .into()
 }
