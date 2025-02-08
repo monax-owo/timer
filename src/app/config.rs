@@ -188,6 +188,9 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
 
 pub(crate) fn load(app: &mut super::App) {
   println!("config loaded");
+
+  app.config.load().unwrap();
+
   let config = &app.config;
 
   app.notification = config.notification.clone().into();
