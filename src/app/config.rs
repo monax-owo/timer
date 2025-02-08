@@ -25,7 +25,7 @@ pub struct UserConfig {
 impl Default for UserConfig {
   fn default() -> Self {
     Self {
-      check_rate: Hms::new().seconds(3),
+      check_rate: Hms::ZERO.seconds(3),
       duration: Hms::default(),
       notification: NotificationLike::default(),
     }
@@ -76,7 +76,7 @@ impl Hms {
 
 impl Default for Hms {
   fn default() -> Self {
-    Self::new().minutes(30)
+    Self::ZERO.minutes(30)
   }
 }
 

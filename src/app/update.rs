@@ -75,7 +75,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         load(app);
       }
     },
-    Message::ChangeCheckRate(v) => app.config.check_rate = Hms::new().seconds(v),
+    Message::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.seconds(v),
     Message::ChangeDuration(duration) => {
       dbg!(duration);
     }
