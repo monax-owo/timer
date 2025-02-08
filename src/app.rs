@@ -5,7 +5,6 @@ mod view;
 
 use std::time::Duration;
 
-use config::{Hms, NotificationLike};
 use configu::Config;
 use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
 use notify_rust::Notification;
