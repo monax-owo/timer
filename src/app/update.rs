@@ -13,6 +13,12 @@ use super::{
 
 pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
   match message {
+    Message::Tick => {
+      if app.timer.tick() {
+        println!("elapsed!");
+        return Task::done(Message::Notify);
+      }
+    }
     Message::WindowEvent((e, id)) => match e {
       window::Event::Opened { .. } => {
         return Task::batch([
@@ -71,12 +77,6 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         load(app);
       }
     },
-    Message::Tick => {
-      if app.timer.tick() {
-        println!("elapsed!");
-        return Task::done(Message::Notify);
-      }
-    }
     Message::ChangeCheckRate(v) => app.config.check_rate = Duration::from_secs(v.into()),
     Message::ChangeDuration(duration) => {
       dbg!(duration);

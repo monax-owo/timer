@@ -37,6 +37,8 @@ pub enum Page {
 
 #[derive(Debug, Clone)]
 pub enum Message {
+  Tick,
+
   // window
   WindowEvent((window::Event, window::Id)),
   WindowCreateRequested,
@@ -48,7 +50,6 @@ pub enum Message {
   // config
   ConfigEvent(ConfigEvent),
 
-  Tick,
   ChangeCheckRate(u32),
   ChangeDuration(Duration),
   ChangeTheme(Theme),
