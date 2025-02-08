@@ -30,6 +30,7 @@ pub struct App {
   pub timer: timer::Timer,
 }
 
+#[derive(Debug, Clone)]
 pub enum Page {
   Main,
   Config,
