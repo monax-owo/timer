@@ -17,7 +17,7 @@ pub enum ConfigEvent {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct UserConfig {
-  pub check_rate: Duration,
+  pub check_rate: Hms,
   pub duration: Hms,
   pub notification: NotificationLike,
 }
@@ -25,7 +25,7 @@ pub struct UserConfig {
 impl Default for UserConfig {
   fn default() -> Self {
     Self {
-      check_rate: Duration::from_secs(3),
+      check_rate: Hms::new().seconds(3),
       duration: Hms::default(),
       notification: NotificationLike::default(),
     }

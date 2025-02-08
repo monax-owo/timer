@@ -1,5 +1,3 @@
-use std::time::Duration;
-
 use iced::{
   window::{self, settings::PlatformSpecific},
   Task,
@@ -7,7 +5,7 @@ use iced::{
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
-  config::{load, ConfigEvent},
+  config::{load, ConfigEvent, Hms},
   App, Message,
 };
 
@@ -77,7 +75,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         load(app);
       }
     },
-    Message::ChangeCheckRate(v) => app.config.check_rate = Duration::from_secs(v.into()),
+    Message::ChangeCheckRate(v) => app.config.check_rate = Hms::new().seconds(v),
     Message::ChangeDuration(duration) => {
       dbg!(duration);
     }

@@ -51,7 +51,7 @@ pub enum Message {
   // config
   ConfigEvent(ConfigEvent),
 
-  ChangeCheckRate(u32),
+  ChangeCheckRate(u8),
   ChangeDuration(Duration),
   ChangeTheme(Theme),
   ChangePage(Page),
@@ -82,7 +82,7 @@ impl App {
         Event::Window(e) => Some(Message::WindowEvent((e, id))),
         _ => None,
       }),
-      time::every(self.config.check_rate).map(|_| Message::Tick),
+      time::every(self.config.check_rate.clone().into()).map(|_| Message::Tick),
       subscription::tray_listener().map(|e| match e {
         subscription::TrayEvent::MenuEvent(id) => Message::TrayMenuEvent(id),
         subscription::TrayEvent::IconEvent(e) => Message::TrayIconEvent(e),
