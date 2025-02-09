@@ -101,6 +101,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         app.info = Some(text);
         return Task::future(async {
           tokio::time::sleep(Duration::from_secs(3)).await;
+          // TODO:重複してClearを送信しないようにする
           Message::Info(Info::Clear)
         });
       }
