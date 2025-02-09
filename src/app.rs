@@ -19,7 +19,7 @@ pub struct App {
   // ui
   pub current_theme: Theme,
   pub page: Page,
-  pub message: VecDeque<String>,
+  pub info: VecDeque<String>,
 
   // app
   pub window: Option<window::Id>,
@@ -124,7 +124,7 @@ impl App {
 
     let mut app_state = App {
       window: None,
-      message: VecDeque::new(),
+      info: VecDeque::new(),
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,

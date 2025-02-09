@@ -1,14 +1,14 @@
 use super::*;
 
 pub fn view(app: &App, _id: window::Id) -> Element<Message> {
-  let message = app.message.front().map(|msg| text(msg));
+  let info = app.info.front().map(|info| text(info));
 
   {
     container(
       Column::new()
         .push(
           Row::new()
-            .push_maybe(message)
+            .push_maybe(info)
             .push(Space::with_width(Fill))
             .push(
               button(text("!").align_x(Center))
