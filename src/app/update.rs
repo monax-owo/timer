@@ -1,12 +1,15 @@
+use std::time::Duration;
+
 use iced::{
   window::{self, settings::PlatformSpecific},
   Task,
 };
+use tokio::time;
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
   config::{load, ConfigEvent, Hms},
-  App, Message,
+  App, Info, Message,
 };
 
 pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
@@ -70,9 +73,13 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
     }
     Message::ConfigEvent(e) => match e {
-      ConfigEvent::Save => println!("config saved"),
+      ConfigEvent::Save => {
+        println!("config saved");
+        return Task::done(Message::Info(Info::Send("config saved".to_owned())));
+      }
       ConfigEvent::Load => {
         load(app);
+        return Task::done(Message::Info(Info::Send("config loaded".to_owned())));
       }
     },
     Message::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),
@@ -90,6 +97,19 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       return Task::done(Message::Tick);
     }
     Message::Notify => app.notification.show().unwrap(),
+    Message::Info(info) => match info {
+      Info::Send(text) => {
+        app.info.push_back(text);
+        return Task::future(async {
+          tokio::time::sleep(Duration::from_secs(3)).await;
+          Message::Info(Info::Clear)
+        });
+      }
+      Info::Clear => {
+        dbg!("cleared");
+        app.info.clear();
+      }
+    },
   }
   Task::none()
 }
