@@ -3,6 +3,7 @@
     "appname",
     "chrono",
     "configu",
+    "Deque",
     "serde",
     "Strftime"
   ]
