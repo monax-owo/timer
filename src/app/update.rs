@@ -4,7 +4,6 @@ use iced::{
   window::{self, settings::PlatformSpecific},
   Task,
 };
-use tokio::time;
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
@@ -99,7 +98,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::Notify => app.notification.show().unwrap(),
     Message::Info(info) => match info {
       Info::Send(text) => {
-        app.info.push_back(text);
+        app.info = Some(text);
         return Task::future(async {
           tokio::time::sleep(Duration::from_secs(3)).await;
           Message::Info(Info::Clear)
@@ -107,7 +106,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
       Info::Clear => {
         dbg!("cleared");
-        app.info.clear();
+        app.info = None;
       }
     },
   }
