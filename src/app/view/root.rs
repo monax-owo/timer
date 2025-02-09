@@ -1,7 +1,7 @@
 use super::*;
 
 pub fn view(app: &App, _id: window::Id) -> Element<Message> {
-  let info = app.info.as_ref().map(|info| text(info));
+  let info = app.info.as_ref().map(text);
 
   {
     container(
