@@ -1,22 +1,27 @@
 use super::*;
 
 pub fn view(app: &App, _id: window::Id) -> Element<Message> {
+  let message = app.message.front().map(|msg| text(msg));
+
   {
     container(
       Column::new()
         .push(
-          container(
-            button(text("!").align_x(Center))
-              .on_press_with(|| {
-                Message::ChangePage(match app.page {
-                  Page::Main => Page::Config,
-                  Page::Config => Page::Main,
+          Row::new()
+            .push_maybe(message)
+            .push(Space::with_width(Fill))
+            .push(
+              button(text("!").align_x(Center))
+                .on_press_with(|| {
+                  Message::ChangePage(match app.page {
+                    Page::Main => Page::Config,
+                    Page::Config => Page::Main,
+                  })
                 })
-              })
-              .height(32)
-              .width(32),
-          )
-          .align_right(Fill),
+                .height(32)
+                .width(32),
+            )
+            .spacing(4),
         )
         .push(
           container(match app.page {

@@ -3,7 +3,7 @@ mod timer;
 mod update;
 mod view;
 
-use std::time::Duration;
+use std::{collections::VecDeque, time::Duration};
 
 use configu::Config;
 use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
@@ -19,6 +19,7 @@ pub struct App {
   // ui
   pub current_theme: Theme,
   pub page: Page,
+  pub message: VecDeque<String>,
 
   // app
   pub window: Option<window::Id>,
@@ -123,6 +124,7 @@ impl App {
 
     let mut app_state = App {
       window: None,
+      message: VecDeque::new(),
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,
