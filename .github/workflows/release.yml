@@ -22,7 +22,7 @@ jobs:
           - os: windows-latest
             rust-target: i686-pc-windows-msvc
             artifact-name: win32
-            artifact-suffix: ${{ env.APP_NAME }}.exe
+            artifact-suffix: .exe
             tar: false
     runs-on: ${{ matrix.os }}
     steps:
