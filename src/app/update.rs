@@ -52,7 +52,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
           ..Default::default()
         });
         app.window = Some(id);
-        return open.chain(window::gain_focus(id)).map(|_| Message::Tick);
+        return open.chain(window::gain_focus(id)).discard();
       }
     }
     Message::TrayMenuEvent(id) => match id.0.as_str() {
