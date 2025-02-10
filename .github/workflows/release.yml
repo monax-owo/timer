@@ -9,20 +9,20 @@ env:
   APP_NAME: timer
 jobs:
   build:
-  strategy:
-    matrix:
-      include:
-        - os: windows-latest
-          rust-target: x86_64-pc-windows-msvc
-          artifact-name: win64
-          artifact-file: $APP_NAME.exe
-          tar: false
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            rust-target: x86_64-pc-windows-msvc
+            artifact-name: win64
+            artifact-file: $APP_NAME.exe
+            tar: false
 
-        - os: windows-latest
-          rust-target: i686-pc-windows-msvc
-          artifact-name: win32
-          artifact-file: $APP_NAME.exe
-          tar: false
+          - os: windows-latest
+            rust-target: i686-pc-windows-msvc
+            artifact-name: win32
+            artifact-file: $APP_NAME.exe
+            tar: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
