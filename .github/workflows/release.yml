@@ -44,6 +44,8 @@ jobs:
           path: target/release/${{ env.APP_NAME }}${{ matrix.artifact-suffix }}
 
   release:
+    permissions:
+      contents: write
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -56,6 +58,6 @@ jobs:
       - name: Create release
         uses: softprops/action-gh-release@v2.2.1
         with:
-          files: artifacts/*
+          files: artifacts/**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
