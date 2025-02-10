@@ -63,13 +63,7 @@ pub enum Message {
   // true = stop, false = start
   Pause(bool),
   Notify,
-  Info(Info),
-}
-
-#[derive(Debug, Clone)]
-pub enum Info {
-  Send(String),
-  Clear,
+  Info(info::Info),
 }
 
 impl App {

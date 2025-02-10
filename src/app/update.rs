@@ -8,7 +8,8 @@ use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
   config::{load, ConfigEvent, Hms},
-  info, App, Info, Message,
+  info::{self, Info},
+  App, Message,
 };
 
 pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
