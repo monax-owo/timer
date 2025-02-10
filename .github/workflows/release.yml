@@ -34,6 +34,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           key: ${{ matrix.rust-target }}
+
       - name: Build
         run: cargo build --release
 
@@ -53,8 +54,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+
       - name: ls
         run: ls
+
       - name: Create release
         uses: softprops/action-gh-release@v2.2.1
         with:
