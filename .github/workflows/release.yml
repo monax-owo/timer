@@ -38,11 +38,14 @@ jobs:
       - name: Build
         run: cargo build --release
 
+      - name: Rename
+        run: mv target/release/timer.exe target/release/timer-${{ matrix.artifact-name }}.exe
+
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.APP_NAME }}-${{ matrix.artifact-name }}
-          path: target/release/${{ env.APP_NAME }}${{ matrix.artifact-suffix }}
+          path: target/release/${{ env.APP_NAME }}-${{ matrix.artifact-name }}${{ matrix.artifact-suffix }}
 
   release:
     permissions:
