@@ -8,7 +8,7 @@ use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
   config::{load, ConfigEvent, Hms},
-  App, Info, Message,
+  info, App, Info, Message,
 };
 
 pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
@@ -74,11 +74,11 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::ConfigEvent(e) => match e {
       ConfigEvent::Save => {
         println!("config saved");
-        return Task::done(Message::Info(Info::Send("config saved".to_owned())));
+        return info::send("config saved");
       }
       ConfigEvent::Load => {
         load(app);
-        return Task::done(Message::Info(Info::Send("config loaded".to_owned())));
+        return info::send("config loaded");
       }
     },
     Message::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),

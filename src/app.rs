@@ -1,4 +1,5 @@
 mod config;
+mod info;
 mod timer;
 mod update;
 mod view;
