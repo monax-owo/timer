@@ -33,7 +33,7 @@ jobs:
 
       - uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.rust-target }}
+          prefix-key: ${{ matrix.rust-target }}
 
       - name: Build
         run: cargo build --release
