@@ -32,7 +32,8 @@ jobs:
           toolchain: stable-${{ matrix.rust-target }}
 
       - uses: Swatinem/rust-cache@v2
-
+        with:
+          key: ${{ matrix.rust-target }}
       - name: Build
         run: cargo build --release
 
