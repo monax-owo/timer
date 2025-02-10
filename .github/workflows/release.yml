@@ -16,13 +16,13 @@ jobs:
           - os: windows-latest
             rust-target: x86_64-pc-windows-msvc
             artifact-name: win64
-            artifact-file: $APP_NAME.exe
+            artifact-suffix: .exe
             tar: false
 
           - os: windows-latest
             rust-target: i686-pc-windows-msvc
             artifact-name: win32
-            artifact-file: $APP_NAME.exe
+            artifact-suffix: .exe
             tar: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -32,6 +32,8 @@ jobs:
         with:
           toolchain: stable-${{ matrix.rust-target }}
 
+      - uses: Swatinem/rust-cache@v2
+
       - name: Build
         run: cargo build --release
 
@@ -39,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: $APP_NAME
-          path: target/release/${{ matrix.artifact-file }}
+          path: target/release/$APPNAME${{ matrix.artifact-suffix }}
