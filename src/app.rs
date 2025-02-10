@@ -20,6 +20,7 @@ pub struct App {
   pub current_theme: Theme,
   pub page: Page,
   pub info: Option<String>,
+  pub info_handle: Option<iced::task::Handle>,
 
   // app
   pub window: Option<window::Id>,
@@ -132,6 +133,7 @@ impl App {
     let mut app_state = App {
       window: None,
       info: None,
+      info_handle: None,
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,

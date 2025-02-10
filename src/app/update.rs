@@ -99,11 +99,24 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::Info(info) => match info {
       Info::Send(text) => {
         app.info = Some(text);
-        return Task::future(async {
-          tokio::time::sleep(Duration::from_secs(3)).await;
-          // TODO:重複してClearを送信しないようにする
-          Message::Info(Info::Clear)
-        });
+
+        return if let Some(handle) = &app.info_handle {
+          handle.abort();
+
+          app.info_handle = None;
+
+          Task::none()
+        } else {
+          let (task, handle) = Task::future(async {
+            tokio::time::sleep(Duration::from_secs(3)).await;
+            Message::Info(Info::Clear)
+          })
+          .abortable();
+
+          app.info_handle = Some(handle);
+
+          task
+        };
       }
       Info::Clear => {
         dbg!("cleared");
