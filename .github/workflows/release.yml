@@ -22,7 +22,7 @@ jobs:
           - os: windows-latest
             rust-target: i686-pc-windows-msvc
             artifact-name: win32
-            artifact-suffix: ${APP_NAME}.exe
+            artifact-suffix: ${{ env.APP_NAME }}.exe
             tar: false
     runs-on: ${{ matrix.os }}
     steps:
@@ -41,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: $APP_NAME
-          path: target/release/${APP_NAME}${{ matrix.artifact-suffix }}
+          path: target/release/${{ env.APP_NAME }}${{ matrix.artifact-suffix }}
