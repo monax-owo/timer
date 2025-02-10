@@ -7,6 +7,7 @@ on:
 env:
   CARGO_TERM_COLOR: always
   APP_NAME: timer
+
 jobs:
   build:
     strategy:
@@ -26,6 +27,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: dtolnay/rust-toolchain@
         with:
           toolchain: stable-${{ matrix.rust-target }}
