@@ -75,7 +75,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     Message::ConfigEvent(e) => match e {
       ConfigEvent::Save => {
         println!("config saved");
-        return info::send("config saved");
+        return info::send("not implemented");
       }
       ConfigEvent::Load => {
         load(app);
