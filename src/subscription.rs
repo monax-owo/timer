@@ -46,7 +46,10 @@ fn icon_listener() -> impl Stream<Item = TrayEvent> {
     loop {
       if let Ok(e) = icon_event_receiver.recv() {
         match e {
-          TrayIconEvent::Move { .. } => continue,
+          TrayIconEvent::Move { .. } => {
+            tokio::time::sleep(Duration::from_millis(50)).await;
+            continue;
+          }
           _ => output.send(TrayEvent::IconEvent(e)).await.unwrap(),
         }
       }
