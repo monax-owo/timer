@@ -180,6 +180,7 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
   if is_file {
     config.load()?;
   } else {
+    config.file_path = None;
     *config = T::default();
   }
 
@@ -187,9 +188,18 @@ pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Re
 }
 
 pub(crate) fn load(app: &mut super::App) {
-  println!("config loaded");
+  dbg!(&app.config.file_path);
+  app.config.load().or_else(uncheck_path_not_specified).unwrap();
 
-  app.config.load().unwrap();
   app.notification = app.config.notification.clone().into();
   app.timer.duration = (&app.config.duration).into();
+
+  println!("config loaded");
+}
+
+fn uncheck_path_not_specified(err: configu::Error) -> Result<(), configu::Error> {
+  match err {
+    configu::Error::PathNotSpecified => Ok(()),
+    _ => Err(err),
+  }
 }
