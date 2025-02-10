@@ -53,4 +53,5 @@ jobs:
 
       - name: Create release
         uses: softprops/action-gh-release@v2.2.1
-        with: artifacts/*
+        with:
+          files: artifacts/*
