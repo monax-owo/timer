@@ -5,7 +5,7 @@ use super::*;
 pub(super) fn view(_app: &App) -> Element<Message> {
   {
     Column::new()
-      .push(text("Config").center())
+      .push(pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12))
       .push(button("Notify").on_press(Message::Notify))
       .push(
         Row::new()
