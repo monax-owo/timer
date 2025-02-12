@@ -7,7 +7,7 @@ pub(super) fn view(app: &App) -> Element<Message> {
     .push(pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12))
     .push(button("Notify").on_press(Message::Notify));
 
-  {
+  Element::from({
     Column::new()
       .push(text("Configs").center())
       .push(scrollable(configs.spacing(8)).height(Fill))
@@ -24,6 +24,5 @@ pub(super) fn view(app: &App) -> Element<Message> {
       .width(Fill)
       .align_x(Center)
       .spacing(12)
-  }
-  .into()
+  })
 }

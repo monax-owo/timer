@@ -8,13 +8,12 @@ pub(super) fn view(app: &App) -> Element<Message> {
 
   let pause = if app.timer.enable { "Pause" } else { "Start" };
 
-  {
+  Element::from({
     Column::new()
       .push(text(next).size(20))
       .push(button(pause).on_press(Message::Pause(app.timer.enable)))
       .width(Fill)
       .align_x(Center)
       .spacing(12)
-  }
-  .into()
+  })
 }

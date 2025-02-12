@@ -3,7 +3,7 @@ use super::*;
 pub fn view(app: &App, _id: window::Id) -> Element<Message> {
   let info = app.info.as_ref().map(text);
 
-  {
+  Element::from({
     container(
       Column::new()
         .push(
@@ -36,6 +36,5 @@ pub fn view(app: &App, _id: window::Id) -> Element<Message> {
     .height(Fill)
     .width(Fill)
     .padding(8)
-  }
-  .into()
+  })
 }
