@@ -1,8 +1,6 @@
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
-  let check_rate_slider = slider(1..=60, app.config.check_rate.second, Message::ChangeCheckRate);
-
   let next = match app.timer.next {
     Some(next) => format!("Next: {}", next.format("%H:%M:%S")),
     None => "Break".to_string(),
@@ -12,19 +10,11 @@ pub(super) fn view(app: &App) -> Element<Message> {
 
   {
     Column::new()
-      .push(text(next))
+      .push(text(next).size(20))
       .push(button(pause).on_press(Message::Pause(app.timer.enable)))
-      .push(
-        Row::new()
-          .push(text(app.config.check_rate.second).center().width(32))
-          .push(container(check_rate_slider.width(Fill)).padding([0, 12]))
-          .push(Space::with_width(32))
-          .align_y(Center)
-          .padding([0, 8]),
-      )
-      .push(button("Notify").on_press(Message::Notify))
+      .width(Fill)
       .align_x(Center)
-      .spacing(4)
+      .spacing(12)
   }
   .into()
 }

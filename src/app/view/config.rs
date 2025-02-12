@@ -6,6 +6,7 @@ pub(super) fn view(_app: &App) -> Element<Message> {
   {
     Column::new()
       .push(text("Config").center())
+      .push(button("Notify").on_press(Message::Notify))
       .push(
         Row::new()
           .push(button(text("Load")).on_press(Message::ConfigEvent(ConfigEvent::Load)))
