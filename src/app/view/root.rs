@@ -1,9 +1,11 @@
+use iced::Color;
+
 use super::*;
 
 pub fn view(app: &App, _id: window::Id) -> Element<Message> {
   let info = app.info.as_ref().map(text);
 
-  Element::from({
+  let view = Element::from({
     container(
       Column::new()
         .push(
@@ -36,5 +38,12 @@ pub fn view(app: &App, _id: window::Id) -> Element<Message> {
     .height(Fill)
     .width(Fill)
     .padding(8)
-  })
+  });
+
+  #[cfg(debug_assertions)]
+  if app.explain {
+    return view.explain(Color::from_rgba(0.0, 1.0, 1.0, 0.2));
+  }
+
+  view
 }

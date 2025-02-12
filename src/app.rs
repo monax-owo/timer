@@ -22,6 +22,8 @@ pub struct App {
   pub page: Page,
   pub info: Option<String>,
   pub info_handle: Option<iced::task::Handle>,
+  #[cfg(debug_assertions)]
+  pub explain: bool,
 
   // app
   pub window: Option<window::Id>,
@@ -129,6 +131,8 @@ impl App {
       window: None,
       info: None,
       info_handle: None,
+      #[cfg(debug_assertions)]
+      explain: true,
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,
