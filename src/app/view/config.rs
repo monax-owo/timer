@@ -2,9 +2,10 @@ use crate::app::config::ConfigEvent;
 
 use super::*;
 
-pub(super) fn view(_app: &App) -> Element<Message> {
+pub(super) fn view(app: &App) -> Element<Message> {
   {
     Column::new()
+      .push(text("Configs").center())
       .push(pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12))
       .push(button("Notify").on_press(Message::Notify))
       .push(
@@ -16,7 +17,7 @@ pub(super) fn view(_app: &App) -> Element<Message> {
       )
       .width(Fill)
       .align_x(Center)
-      .spacing(4)
+      .spacing(12)
   }
   .into()
 }
