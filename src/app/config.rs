@@ -197,6 +197,12 @@ pub(crate) fn load(app: &mut super::App) {
   println!("config loaded");
 }
 
+pub(crate) fn save(app: &super::App) {
+  app.config.save().or_else(uncheck_path_not_specified).unwrap();
+
+  println!("config saved");
+}
+
 fn uncheck_path_not_specified(err: configu::Error) -> Result<(), configu::Error> {
   match err {
     configu::Error::PathNotSpecified => Ok(()),

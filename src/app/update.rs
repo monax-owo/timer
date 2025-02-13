@@ -7,7 +7,7 @@ use iced::{
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
 
 use super::{
-  config::{load, ConfigEvent, Hms},
+  config::{load, save, ConfigEvent, Hms},
   info::{self, Info},
   App, Message,
 };
@@ -74,8 +74,8 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     }
     Message::ConfigEvent(e) => match e {
       ConfigEvent::Save => {
-        println!("config saved");
-        return info::send("not implemented");
+        save(app);
+        return info::send("config saved");
       }
       ConfigEvent::Load => {
         load(app);
