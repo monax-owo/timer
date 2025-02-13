@@ -3,9 +3,11 @@ use crate::app::config::ConfigEvent;
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
+  let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12);
+
   let configs = Column::new()
-    .push(pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12))
-    .push(button("Notify").on_press(Message::Notify));
+    .push(config_item("select theme", theme_pick))
+    .push(config_item("testing notify", button("Send").on_press(Message::Notify)));
 
   Element::from({
     Column::new()
@@ -25,4 +27,11 @@ pub(super) fn view(app: &App) -> Element<Message> {
       .align_x(Center)
       .spacing(12)
   })
+}
+
+fn config_item<'a, Msg: 'a>(
+  label: impl Into<Element<'a, Msg>>,
+  input: impl Into<Element<'a, Msg>>,
+) -> Element<'a, Msg> {
+  Element::from(Row::new().push(label).push(Space::with_width(Fill)).push(input))
 }
