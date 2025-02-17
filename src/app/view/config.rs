@@ -38,10 +38,8 @@ fn config_item<'a, Msg: 'a>(
 }
 
 fn create_config<'a, Msg: 'a>(items: Vec<(&'a str, Element<'a, Msg>)>) -> Column<'a, Msg> {
-  let vec = items
+  items
     .into_iter()
     .map(|(label, element)| config_item(label, element))
-    .collect::<Vec<_>>();
-
-  Column::new().extend(vec.into_iter())
+    .fold(Column::new(), Column::push)
 }
