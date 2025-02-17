@@ -4,11 +4,15 @@ use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
   let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12);
-
-  let configs = create_config(vec![
+  let mut config_items = vec![
     ("select theme", theme_pick.into()),
     ("testing notify", button("Send").on_press(Message::Notify).into()),
-  ]);
+  ];
+
+  #[cfg(debug_assertions)]
+  config_items.extend(vec![("debug only", "test".into())]);
+
+  let configs = create_config(config_items);
 
   Element::from({
     Column::new()
