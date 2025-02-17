@@ -22,7 +22,7 @@ impl Timer {
         println!("next: {}", next.format_with_items(fmt.clone()));
       }
 
-      let elapsed = *next < now;
+      let elapsed = dbg!(next.signed_duration_since(now).num_seconds()) <= 0;
 
       if elapsed {
         self.next = Some(now + self.duration);
