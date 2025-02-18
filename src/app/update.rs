@@ -35,11 +35,7 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
     },
     Message::WindowCreateRequested => {
       if let Some(id) = app.window {
-        return Task::batch([
-          window::minimize(id, false),
-          window::change_mode(id, window::Mode::Windowed),
-        ])
-        .chain(window::gain_focus(id));
+        return window::gain_focus(id);
       } else {
         let (id, open) = window::open(window::Settings {
           size: [600.0, 400.0].into(),
