@@ -15,8 +15,13 @@ notify-rust = "4.11.4"
 serde = { version = "1.0.217", features = ["derive"] }
 tokio = { version = "1.43.0", features = ["sync"] }
 tray-icon = "0.19.2"
+windows = { version = "0.59.0", features = [
+  "Win32_Foundation",
+  "Win32_Graphics_Dwm",
+] }
 
 [target.'cfg(windows)'.dependencies]
+windows = "0.59.0"
 windows-registry = "0.4.0"
 
 [workspace]
