@@ -1,6 +1,7 @@
 use std::{env::current_exe, time::Duration};
 
 use configu::{Config, Configurable};
+use iced::Theme;
 use notify_rust::{Notification, Timeout};
 use serde::{Deserialize, Serialize};
 
@@ -17,6 +18,8 @@ pub enum ConfigEvent {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct UserConfig {
+  #[serde(with = "theme")]
+  pub theme: Theme,
   pub check_rate: Hms,
   pub duration: Hms,
   pub notification: NotificationLike,
@@ -25,10 +28,38 @@ pub struct UserConfig {
 impl Default for UserConfig {
   fn default() -> Self {
     Self {
+      theme: Theme::Dark,
       check_rate: Hms::ZERO.second(3),
       duration: Hms::default(),
       notification: NotificationLike::default(),
     }
+  }
+}
+
+mod theme {
+  use iced::Theme;
+  use serde::{Deserialize, Deserializer, Serializer};
+
+  pub fn serialize<S>(t: &Theme, s: S) -> Result<S::Ok, S::Error>
+  where
+    S: Serializer,
+  {
+    s.serialize_str(&t.to_string())
+  }
+
+  pub fn deserialize<'de, D>(d: D) -> Result<Theme, D::Error>
+  where
+    D: Deserializer<'de>,
+  {
+    fn from_str(str: &str) -> Option<Theme> {
+      Theme::ALL
+        .iter()
+        .find(|v| v.to_string().trim().replace(' ', "") == str)
+        .cloned()
+    }
+
+    let s = String::deserialize(d)?;
+    Ok(from_str(&s).unwrap())
   }
 }
 
