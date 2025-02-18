@@ -10,7 +10,12 @@ pub(super) fn view(app: &App) -> Element<Message> {
   ];
 
   #[cfg(debug_assertions)]
-  config_items.extend(vec![("debug only", "test".into())]);
+  config_items.extend(vec![(
+    "debug mode",
+    button(text(app.debug_mode))
+      .on_press(Message::ChangeDebugMode(!app.debug_mode))
+      .into(),
+  )]);
 
   let configs = create_config(config_items);
 

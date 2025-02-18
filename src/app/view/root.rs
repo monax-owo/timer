@@ -41,7 +41,7 @@ pub fn view(app: &App, _id: window::Id) -> Element<Message> {
   });
 
   #[cfg(debug_assertions)]
-  if app.explain {
+  if app.debug_mode {
     return view.explain(Color::from_rgba(0.0, 1.0, 1.0, 0.2));
   }
 

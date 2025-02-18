@@ -124,6 +124,8 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         app.info = None;
       }
     },
+    #[cfg(debug_assertions)]
+    Message::ChangeDebugMode(v) => app.debug_mode = v,
   }
   Task::none()
 }

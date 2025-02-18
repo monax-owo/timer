@@ -23,7 +23,7 @@ pub struct App {
   pub info: Option<String>,
   pub info_handle: Option<iced::task::Handle>,
   #[cfg(debug_assertions)]
-  pub explain: bool,
+  pub debug_mode: bool,
 
   // app
   pub window: Option<window::Id>,
@@ -66,6 +66,8 @@ pub enum Message {
   Pause(bool),
   Notify,
   Info(info::Info),
+  #[cfg(debug_assertions)]
+  ChangeDebugMode(bool),
 }
 
 impl App {
@@ -132,7 +134,7 @@ impl App {
       info: None,
       info_handle: None,
       #[cfg(debug_assertions)]
-      explain: true,
+      debug_mode: true,
       current_theme: Theme::Dark,
       page: Page::Main,
       task_tray,
