@@ -1,7 +1,9 @@
+mod windows;
+
 use std::time::Duration;
 
 use iced::{
-  window::{self, settings::PlatformSpecific},
+  window::{self, raw_window_handle::RawWindowHandle, settings::PlatformSpecific},
   Task,
 };
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
@@ -50,7 +52,16 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
           ..Default::default()
         });
         app.window = Some(id);
-        return open.chain(window::gain_focus(id)).discard();
+
+        return open
+          .chain(window::gain_focus(id))
+          .discard()
+          .chain(window::run_with_handle(id, move |handle| match handle.as_raw() {
+            #[cfg(windows)]
+            RawWindowHandle::Win32(handle) => windows::window_create_requested(handle),
+            _ => (),
+          }))
+          .discard();
       }
     }
     Message::TrayMenuEvent(id) => match id.0.as_str() {
