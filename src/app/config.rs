@@ -36,6 +36,53 @@ impl Default for UserConfig {
   }
 }
 
+pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Result<Config<T>, configu::Error> {
+  let config_file = current_exe()
+    .expect("failed to get current exe")
+    .parent()
+    .expect("failed to get parent directory")
+    .join(CONFIG_FILE);
+
+  let is_file = config_file.is_file();
+  let mut config = Config::<T>::open(Some(config_file));
+
+  if is_file {
+    config.load()?;
+  } else {
+    config.file_path = None;
+    *config = T::default();
+  }
+
+  Ok(config)
+}
+
+pub(crate) fn load(app: &mut super::App) {
+  dbg!(&app.config.file_path);
+  app.config.load().or_else(uncheck_path_not_specified).unwrap();
+
+  app.current_theme = app.config.theme.clone();
+  app.notification = app.config.notification.clone().into();
+  app.timer.duration = (&app.config.duration).into();
+
+  println!("config loaded");
+}
+
+pub(crate) fn save(app: &mut super::App) {
+  app.config.theme = app.current_theme.clone();
+  app.config.duration = app.timer.duration.into();
+
+  app.config.save().or_else(uncheck_path_not_specified).unwrap();
+
+  println!("config saved");
+}
+
+fn uncheck_path_not_specified(err: configu::Error) -> Result<(), configu::Error> {
+  match err {
+    configu::Error::PathNotSpecified => Ok(()),
+    _ => Err(err),
+  }
+}
+
 mod theme {
   use iced::Theme;
   use serde::{Deserialize, Deserializer, Serializer};
@@ -276,52 +323,5 @@ impl From<TimeoutLike> for Timeout {
       TimeoutLike::Never => Timeout::Never,
       TimeoutLike::Milliseconds(ms) => Timeout::Milliseconds(ms),
     }
-  }
-}
-
-pub(crate) fn config<T: for<'de> Deserialize<'de> + Serialize + Default>() -> Result<Config<T>, configu::Error> {
-  let config_file = current_exe()
-    .expect("failed to get current exe")
-    .parent()
-    .expect("failed to get parent directory")
-    .join(CONFIG_FILE);
-
-  let is_file = config_file.is_file();
-  let mut config = Config::<T>::open(Some(config_file));
-
-  if is_file {
-    config.load()?;
-  } else {
-    config.file_path = None;
-    *config = T::default();
-  }
-
-  Ok(config)
-}
-
-pub(crate) fn load(app: &mut super::App) {
-  dbg!(&app.config.file_path);
-  app.config.load().or_else(uncheck_path_not_specified).unwrap();
-
-  app.current_theme = app.config.theme.clone();
-  app.notification = app.config.notification.clone().into();
-  app.timer.duration = (&app.config.duration).into();
-
-  println!("config loaded");
-}
-
-pub(crate) fn save(app: &mut super::App) {
-  app.config.theme = app.current_theme.clone();
-  app.config.duration = app.timer.duration.into();
-
-  app.config.save().or_else(uncheck_path_not_specified).unwrap();
-
-  println!("config saved");
-}
-
-fn uncheck_path_not_specified(err: configu::Error) -> Result<(), configu::Error> {
-  match err {
-    configu::Error::PathNotSpecified => Ok(()),
-    _ => Err(err),
   }
 }
