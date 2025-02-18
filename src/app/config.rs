@@ -54,7 +54,7 @@ mod theme {
     fn from_str(str: &str) -> Option<Theme> {
       Theme::ALL
         .iter()
-        .find(|v| v.to_string().trim().replace(' ', "") == str)
+        .find(|v| v.to_string().trim().replace(' ', "") == str.trim().replace(' ', ""))
         .cloned()
     }
 
