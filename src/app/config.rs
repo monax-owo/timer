@@ -78,9 +78,9 @@ impl Hms {
   };
 
   pub const MAX: Self = Self {
-    hour: u8::MAX,
-    minute: u8::MAX,
-    second: u8::MAX,
+    hour: 24,
+    minute: 00,
+    second: 00,
   };
 
   pub fn new(hour: u8, minute: u8, second: u8) -> Self {
@@ -101,6 +101,70 @@ impl Hms {
     self.hour = hour;
     self
   }
+
+  pub fn normalize(&self) -> Self {
+    let mut second = self.second;
+    let mut minute = self.minute;
+    let mut hour = self.hour;
+
+    minute += second / 60;
+    second %= 60;
+
+    hour += minute / 60;
+    minute %= 60;
+
+    Self { hour, minute, second }
+  }
+
+  pub fn as_seconds(&self) -> u32 {
+    let normalize = self.normalize();
+    normalize.second as u32 + (normalize.minute as u32 * 60) + (normalize.hour as u32 * 60 * 60)
+  }
+
+  pub fn as_minutes(&self) -> u32 {
+    let normalize = self.normalize();
+
+    normalize.minute as u32 + (normalize.hour as u32 * 60)
+  }
+
+  pub fn as_hours(&self) -> u32 {
+    let normalize = self.normalize();
+
+    normalize.hour as u32
+  }
+
+  pub fn from_secs(second: u32) -> Self {
+    if Self::MAX.as_seconds() < second {
+      panic!("out of range")
+    }
+
+    Self {
+      hour: (second / 3600) as u8,
+      minute: ((second % 3600) / 60) as u8,
+      second: (second % 60) as u8,
+    }
+  }
+
+  pub fn from_minutes(minute: u32) -> Self {
+    if Self::MAX.as_minutes() < minute {
+      panic!("out of range")
+    }
+    Self::ZERO
+  }
+
+  pub fn from_hours(hour: u8) -> Self {
+    if Self::MAX.as_hours() < hour as u32 {
+      panic!("out of range")
+    }
+    Self::ZERO
+  }
+}
+
+#[test]
+fn test() {
+  dbg!(Hms::MAX.as_seconds());
+  let hms = Hms::from_secs(1919);
+  dbg!(hms);
 }
 
 impl Default for Hms {
@@ -117,7 +181,24 @@ impl From<Hms> for Duration {
 
 impl From<&Hms> for Duration {
   fn from(value: &Hms) -> Self {
-    Self::from_secs(value.hour as u64 * 3600 + value.minute as u64 * 60 + value.second as u64)
+    Self::from_secs(value.as_seconds() as u64)
+  }
+}
+
+impl From<Duration> for Hms {
+  fn from(value: Duration) -> Self {
+    Self::from(&value)
+  }
+}
+
+impl From<&Duration> for Hms {
+  fn from(value: &Duration) -> Self {
+    let normalize = value.as_secs();
+
+    if Self::MAX.as_seconds() as u64 <= normalize {
+      panic!("out of range")
+    }
+    Self::from_secs(normalize as u32)
   }
 }
 
@@ -222,13 +303,16 @@ pub(crate) fn load(app: &mut super::App) {
   dbg!(&app.config.file_path);
   app.config.load().or_else(uncheck_path_not_specified).unwrap();
 
+  app.current_theme = app.config.theme.clone();
   app.notification = app.config.notification.clone().into();
   app.timer.duration = (&app.config.duration).into();
 
   println!("config loaded");
 }
 
-pub(crate) fn save(app: &super::App) {
+pub(crate) fn save(app: &mut super::App) {
+  app.config.duration = app.timer.duration.into();
+
   app.config.save().or_else(uncheck_path_not_specified).unwrap();
 
   println!("config saved");
