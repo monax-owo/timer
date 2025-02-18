@@ -6,13 +6,13 @@ pub(super) fn view(app: &App) -> Element<Message> {
   let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12);
   let mut config_items = vec![
     ("select theme", theme_pick.into()),
-    ("testing notify", button("Send").on_press(Message::Notify).into()),
+    ("testing notify", config_button("Send").on_press(Message::Notify).into()),
   ];
 
   #[cfg(debug_assertions)]
   config_items.extend(vec![(
     "debug mode",
-    button(text(app.debug_mode))
+    config_button(app.debug_mode)
       .on_press(Message::ChangeDebugMode(!app.debug_mode))
       .into(),
   )]);
@@ -26,8 +26,8 @@ pub(super) fn view(app: &App) -> Element<Message> {
       .push(
         container(
           Row::new()
-            .push(button(text("Load")).on_press(Message::ConfigEvent(ConfigEvent::Load)))
-            .push(button(text("Save")).on_press(Message::ConfigEvent(ConfigEvent::Save)))
+            .push(config_button("Load").on_press(Message::ConfigEvent(ConfigEvent::Load)))
+            .push(config_button("Save").on_press(Message::ConfigEvent(ConfigEvent::Save)))
             .align_y(Center)
             .spacing(4),
         )
@@ -37,6 +37,10 @@ pub(super) fn view(app: &App) -> Element<Message> {
       .align_x(Center)
       .spacing(12)
   })
+}
+
+fn config_button<'a, Msg: 'a>(text: impl text::IntoFragment<'a>) -> Button<'a, Msg> {
+  Button::new(Text::new(text).center()).width(64)
 }
 
 fn config_item<'a, Msg: 'a>(
