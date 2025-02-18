@@ -311,6 +311,7 @@ pub(crate) fn load(app: &mut super::App) {
 }
 
 pub(crate) fn save(app: &mut super::App) {
+  app.config.theme = app.current_theme.clone();
   app.config.duration = app.timer.duration.into();
 
   app.config.save().or_else(uncheck_path_not_specified).unwrap();
