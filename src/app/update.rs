@@ -97,15 +97,6 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       super::config::ChangeConfig::ChangeTheme(theme) => app.current_theme = theme,
     },
     Message::ChangePage(page) => app.page = page,
-    Message::Pause(v) => {
-      app.timer.enable = !v;
-      // if stopped
-      if v {
-        app.timer.next = None;
-      }
-      return Task::done(Message::Tick);
-    }
-    Message::Notify => app.notification.show().unwrap(),
     Message::Info(info) => match info {
       Info::Send(text) => {
         app.info = Some(text);
@@ -128,11 +119,17 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
           task
         };
       }
-      Info::Clear => {
-        dbg!("cleared");
-        app.info = None;
-      }
+      Info::Clear => app.info = None,
     },
+    Message::Pause(v) => {
+      app.timer.enable = !v;
+      // if stopped
+      if v {
+        app.timer.next = None;
+      }
+      return Task::done(Message::Tick);
+    }
+    Message::Notify => app.notification.show().unwrap(),
     #[cfg(debug_assertions)]
     Message::ChangeDebugMode(v) => app.debug_mode = v,
   }

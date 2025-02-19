@@ -58,14 +58,14 @@ pub enum Message {
   ConfigEvent(ConfigEvent),
   ChangeConfig(ChangeConfig),
 
-  // ChangeCheckRate(u8),
-  // ChangeDuration(Duration),
-  // ChangeTheme(Theme),
+  // ui
   ChangePage(Page),
+  Info(info::Info),
+
   // true = stop, false = start
   Pause(bool),
   Notify,
-  Info(info::Info),
+
   #[cfg(debug_assertions)]
   ChangeDebugMode(bool),
 }
