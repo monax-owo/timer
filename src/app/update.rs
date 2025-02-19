@@ -30,6 +30,8 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         ])
       }
       window::Event::Closed => app.window = None,
+      // TODO
+      // window::Event::Moved(point) => {}
       window::Event::Unfocused => return window::close(id),
       _ => (),
     },
