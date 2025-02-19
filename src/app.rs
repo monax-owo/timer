@@ -4,8 +4,7 @@ mod timer;
 mod update;
 mod view;
 
-use std::time::Duration;
-
+use config::ChangeConfig;
 use configu::Config;
 use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
 use notify_rust::Notification;
@@ -57,10 +56,11 @@ pub enum Message {
 
   // config
   ConfigEvent(ConfigEvent),
+  ChangeConfig(ChangeConfig),
 
-  ChangeCheckRate(u8),
-  ChangeDuration(Duration),
-  ChangeTheme(Theme),
+  // ChangeCheckRate(u8),
+  // ChangeDuration(Duration),
+  // ChangeTheme(Theme),
   ChangePage(Page),
   // true = stop, false = start
   Pause(bool),

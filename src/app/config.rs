@@ -15,6 +15,13 @@ pub enum ConfigEvent {
   Load,
 }
 
+#[derive(Debug, Clone)]
+pub enum ChangeConfig {
+  ChangeCheckRate(u8),
+  ChangeDuration(Duration),
+  ChangeTheme(Theme),
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone)]
 #[serde(default)]
 pub struct UserConfig {

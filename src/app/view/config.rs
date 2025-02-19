@@ -1,9 +1,12 @@
-use crate::app::config::ConfigEvent;
+use crate::app::config::{ChangeConfig, ConfigEvent};
 
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
-  let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), Message::ChangeTheme).text_size(12);
+  let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), |v| {
+    Message::ChangeConfig(ChangeConfig::ChangeTheme(v))
+  })
+  .text_size(12);
   let mut config_items = vec![
     ("select theme", theme_pick.into()),
     ("testing notify", config_button("Send").on_press(Message::Notify).into()),

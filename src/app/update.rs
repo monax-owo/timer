@@ -89,11 +89,13 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         return info::send("config loaded");
       }
     },
-    Message::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),
-    Message::ChangeDuration(duration) => {
-      dbg!(duration);
-    }
-    Message::ChangeTheme(theme) => app.current_theme = theme,
+    Message::ChangeConfig(msg) => match msg {
+      super::config::ChangeConfig::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),
+      super::config::ChangeConfig::ChangeDuration(duration) => {
+        dbg!(duration);
+      }
+      super::config::ChangeConfig::ChangeTheme(theme) => app.current_theme = theme,
+    },
     Message::ChangePage(page) => app.page = page,
     Message::Pause(v) => {
       app.timer.enable = !v;
