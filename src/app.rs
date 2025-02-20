@@ -6,7 +6,7 @@ mod view;
 
 use config::ChangeConfig;
 use configu::Config;
-use iced::{event, time, window, Element, Event, Subscription, Task, Theme};
+use iced::{event, time, widget::shader::wgpu::hal::Rect, window, Element, Event, Point, Subscription, Task, Theme};
 use notify_rust::Notification;
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
@@ -21,6 +21,7 @@ pub struct App {
   pub page: Page,
   pub info: Option<String>,
   pub info_handle: Option<iced::task::Handle>,
+  pub window_pos: Option<Point>,
   #[cfg(debug_assertions)]
   pub debug_mode: bool,
 
@@ -133,6 +134,7 @@ impl App {
       window: None,
       info: None,
       info_handle: None,
+      window_pos: Some(Point::default()),
       #[cfg(debug_assertions)]
       debug_mode: true,
       current_theme: Theme::Dark,

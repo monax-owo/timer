@@ -3,7 +3,7 @@ use crate::app::config::{ChangeConfig, ConfigEvent};
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
-  let theme_pick = pick_list(Theme::ALL, Some(&app.current_theme), |v| {
+  let theme_pick = pick_list(Theme::ALL, Some(app.current_theme.clone()), |v| {
     Message::ChangeConfig(ChangeConfig::ChangeTheme(v))
   })
   .text_size(12);

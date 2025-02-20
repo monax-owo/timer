@@ -3,7 +3,7 @@ mod windows;
 use std::time::Duration;
 
 use iced::{
-  window::{self, raw_window_handle::RawWindowHandle, settings::PlatformSpecific},
+  window::{self, raw_window_handle::RawWindowHandle, settings::PlatformSpecific, Position},
   Task,
 };
 use tray_icon::{MouseButton, MouseButtonState, TrayIconEvent};
@@ -31,7 +31,10 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
       window::Event::Closed => app.window = None,
       // TODO
-      // window::Event::Moved(point) => {}
+      window::Event::Moved(point) => {
+        app.window_pos = Some(point);
+        dbg!(&app.window_pos);
+      }
       window::Event::Unfocused => return window::close(id),
       _ => (),
     },
@@ -39,7 +42,9 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       if let Some(id) = app.window {
         return window::gain_focus(id);
       } else {
-        let (id, open) = window::open(window::Settings {
+        // TODO:
+        // app.task_tray.rect().unwrap()
+        let mut settings = window::Settings {
           size: [600.0, 400.0].into(),
           resizable: false,
           transparent: true,
@@ -48,7 +53,13 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
             ..Default::default()
           },
           ..Default::default()
-        });
+        };
+        if let Some(v) = app.window_pos {
+          settings.position = Position::Specific(v)
+        }
+        dbg!(&settings);
+
+        let (id, open) = window::open(settings);
         app.window = Some(id);
 
         return open
