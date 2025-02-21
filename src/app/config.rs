@@ -17,9 +17,9 @@ pub enum ConfigEvent {
 
 #[derive(Debug, Clone)]
 pub enum ChangeConfig {
-  ChangeCheckRate(u8),
-  ChangeDuration(Duration),
-  ChangeTheme(Theme),
+  CheckRate(u8),
+  Duration(Duration),
+  Theme(Theme),
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]

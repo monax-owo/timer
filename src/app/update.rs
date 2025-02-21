@@ -101,11 +101,11 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
     },
     Message::ChangeConfig(msg) => match msg {
-      super::config::ChangeConfig::ChangeCheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),
-      super::config::ChangeConfig::ChangeDuration(duration) => {
+      super::config::ChangeConfig::CheckRate(v) => app.config.check_rate = Hms::ZERO.second(v),
+      super::config::ChangeConfig::Duration(duration) => {
         dbg!(duration);
       }
-      super::config::ChangeConfig::ChangeTheme(theme) => app.current_theme = theme,
+      super::config::ChangeConfig::Theme(theme) => app.current_theme = theme,
     },
     Message::ChangePage(page) => app.page = page,
     Message::Info(info) => match info {

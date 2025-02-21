@@ -4,7 +4,7 @@ use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
   let theme_pick = pick_list(Theme::ALL, Some(app.current_theme.clone()), |v| {
-    Message::ChangeConfig(ChangeConfig::ChangeTheme(v))
+    Message::ChangeConfig(ChangeConfig::Theme(v))
   })
   .text_size(12);
   let mut config_items = vec![
