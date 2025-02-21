@@ -7,6 +7,7 @@ mod util;
 
 use app::App;
 use clap::Parser;
+use windows_registry::Key;
 
 pub(crate) const APPID: &str = "io.github.monax-owo.timer";
 #[allow(unused)]
@@ -53,20 +54,14 @@ fn main() -> iced::Result {
       return;
     }
 
-    let app_user_model_id_key = CURRENT_USER.open(r"SOFTWARE\Classes\AppUserModelId").unwrap();
-    let app_id = app_user_model_id_key.create(APPID).unwrap();
-
-    let custom_activator = format!("{{{}}}", UUID.to_uppercase());
-    app_id.set_string("CustomActivator", &custom_activator).unwrap();
-
-    app_id.set_string("DisplayName", APP_NAME).unwrap();
+    register();
 
     // TODO: temp dir
     // key.set_string("IconUri", temp_dir).unwrap();
 
     // TODO: unregister
     if false {
-      app_user_model_id_key.remove_tree(APPID).unwrap();
+      get_app_user_model_id_key().remove_tree(APPID).unwrap();
     }
   })();
 
@@ -79,4 +74,21 @@ fn main() -> iced::Result {
       ..Default::default()
     })
     .run_with(App::run)
+}
+
+fn get_app_user_model_id_key() -> Key {
+  use windows_registry::*;
+
+  CURRENT_USER.open(r"SOFTWARE\Classes\AppUserModelId").unwrap()
+}
+
+fn register() {
+  use windows_registry::*;
+
+  let app_id = get_app_user_model_id_key().create(APPID).unwrap();
+
+  let custom_activator = format!("{{{}}}", UUID.to_uppercase());
+  app_id.set_string("CustomActivator", &custom_activator).unwrap();
+
+  app_id.set_string("DisplayName", APP_NAME).unwrap();
 }
