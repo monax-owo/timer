@@ -47,8 +47,7 @@ fn main() -> iced::Result {
 
   #[cfg(target_os = "windows")]
   (|| {
-    use windows_registry::*;
-
+    use windows::*;
     #[cfg(debug_assertions)]
     if !args.register {
       return;
@@ -76,19 +75,21 @@ fn main() -> iced::Result {
     .run_with(App::run)
 }
 
-fn get_app_user_model_id_key() -> Key {
+#[cfg(windows)]
+mod windows {
+  use crate::{APPID, APP_NAME, UUID};
   use windows_registry::*;
 
-  CURRENT_USER.open(r"SOFTWARE\Classes\AppUserModelId").unwrap()
-}
+  pub fn get_app_user_model_id_key() -> Key {
+    CURRENT_USER.open(r"SOFTWARE\Classes\AppUserModelId").unwrap()
+  }
 
-fn register() {
-  use windows_registry::*;
+  pub fn register() {
+    let app_id = get_app_user_model_id_key().create(APPID).unwrap();
 
-  let app_id = get_app_user_model_id_key().create(APPID).unwrap();
+    let custom_activator = format!("{{{}}}", UUID.to_uppercase());
+    app_id.set_string("CustomActivator", &custom_activator).unwrap();
 
-  let custom_activator = format!("{{{}}}", UUID.to_uppercase());
-  app_id.set_string("CustomActivator", &custom_activator).unwrap();
-
-  app_id.set_string("DisplayName", APP_NAME).unwrap();
+    app_id.set_string("DisplayName", APP_NAME).unwrap();
+  }
 }
