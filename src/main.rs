@@ -7,7 +7,6 @@ mod util;
 
 use app::App;
 use clap::Parser;
-use windows_registry::Key;
 
 pub(crate) const APPID: &str = "io.github.monax-owo.timer";
 #[allow(unused)]
