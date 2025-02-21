@@ -6,7 +6,7 @@ mod view;
 
 use config::ChangeConfig;
 use configu::Config;
-use iced::{event, time, widget::shader::wgpu::hal::Rect, window, Element, Event, Point, Subscription, Task, Theme};
+use iced::{event, time, window, Element, Event, Point, Subscription, Task, Theme};
 use notify_rust::Notification;
 use tray_icon::{
   menu::{Menu, MenuId, MenuItem},
