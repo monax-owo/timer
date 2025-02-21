@@ -45,24 +45,7 @@ fn main() -> iced::Result {
     println!("successfully generate icons");
   }
 
-  #[cfg(target_os = "windows")]
-  (|| {
-    use windows::*;
-    #[cfg(debug_assertions)]
-    if !args.register {
-      return;
-    }
-
-    register();
-
-    // TODO: temp dir
-    // key.set_string("IconUri", temp_dir).unwrap();
-
-    // TODO: unregister
-    if false {
-      get_app_user_model_id_key().remove_tree(APPID).unwrap();
-    }
-  })();
+  init(args);
 
   iced::daemon(APP_NAME, App::update, App::view)
     .theme(App::theme)
@@ -73,6 +56,28 @@ fn main() -> iced::Result {
       ..Default::default()
     })
     .run_with(App::run)
+}
+
+fn init(args: Args) {
+  #[cfg(debug_assertions)]
+  if !args.register {
+    return;
+  }
+
+  #[cfg(windows)]
+  {
+    use windows::*;
+
+    register();
+
+    // TODO: temp dir
+    // key.set_string("IconUri", temp_dir).unwrap();
+
+    // TODO: unregister
+    if false {
+      get_app_user_model_id_key().remove_tree(APPID).unwrap();
+    }
+  }
 }
 
 #[cfg(windows)]
