@@ -15,10 +15,14 @@ pub(crate) const APP_NAME: &str = "Simple Timer";
 
 #[derive(Parser, Debug)]
 struct Args {
+  #[cfg(debug_assertions)]
   #[arg(short, long)]
   gen_icons: bool,
+
   #[arg(short, long)]
   register: bool,
+  #[arg(short, long)]
+  un_register: bool,
 }
 
 fn main() -> iced::Result {
