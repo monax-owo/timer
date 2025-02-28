@@ -5,27 +5,27 @@ use std::{
 
 use chrono::{format::StrftimeItems, Local, NaiveTime};
 
-pub struct Timer<T: Ticker> {
-  ticker: T,
+pub struct Timer {
+  ticker: Box<dyn Ticker>,
   pub data: Data,
 }
 
-impl<T: Ticker> Timer<T> {
+impl Timer {
   pub fn tick(&mut self) -> bool {
     self.ticker.tick(&mut self.data)
   }
 }
 
-impl<T: Ticker + Default> Default for Timer<T> {
+impl Default for Timer {
   fn default() -> Self {
     Self {
-      ticker: T::default(),
+      ticker: Box::new(NormalTicker::default()),
       data: Data::default(),
     }
   }
 }
 
-impl<T: Ticker> Deref for Timer<T> {
+impl Deref for Timer {
   type Target = Data;
 
   fn deref(&self) -> &Self::Target {
@@ -33,7 +33,7 @@ impl<T: Ticker> Deref for Timer<T> {
   }
 }
 
-impl<T: Ticker> DerefMut for Timer<T> {
+impl DerefMut for Timer {
   fn deref_mut(&mut self) -> &mut Self::Target {
     &mut self.data
   }

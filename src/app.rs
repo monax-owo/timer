@@ -34,7 +34,7 @@ pub struct App {
   pub config: Config<config::UserConfig>,
 
   // timer
-  pub timer: timer::Timer<timer::NormalTicker>,
+  pub timer: timer::Timer,
 }
 
 #[derive(Debug, Clone)]
