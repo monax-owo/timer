@@ -34,7 +34,7 @@ pub struct App {
   pub config: Config<config::UserConfig>,
 
   // timer
-  pub timer: timer::Timer,
+  pub timer: timer::Timer<timer::NormalTicker>,
 }
 
 #[derive(Debug, Clone)]
@@ -130,6 +130,9 @@ impl App {
     let notification = config.notification.clone().into();
     let duration = (&config.duration).into();
 
+    let mut timer = timer::Timer::default();
+    timer.data.duration = duration;
+
     let mut app_state = App {
       window: None,
       info: None,
@@ -142,10 +145,7 @@ impl App {
       task_tray,
       notification,
       config,
-      timer: timer::Timer {
-        duration,
-        ..Default::default()
-      },
+      timer,
     };
 
     config::load(&mut app_state);
