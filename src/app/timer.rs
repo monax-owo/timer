@@ -14,6 +14,10 @@ impl Timer {
   pub fn tick(&mut self) -> bool {
     self.ticker.tick(&mut self.data)
   }
+
+  pub fn set_ticker<T: Ticker + 'static>(&mut self, ticker: T) {
+    self.ticker = Box::new(ticker);
+  }
 }
 
 impl Default for Timer {
