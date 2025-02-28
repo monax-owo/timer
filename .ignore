@@ -1,0 +1,6 @@
+*.png
+*.icns
+*.ico
+
+Cargo.lock
+LICENSE-*
