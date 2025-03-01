@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{APPID, APP_NAME};
 
+use super::timer::ticker::Ticker;
+
 const CONFIG_FILE: &str = "timer.toml";
 
 #[derive(Debug, Clone)]
@@ -20,6 +22,7 @@ pub enum ChangeConfig {
   CheckRate(u8),
   Duration(Duration),
   Theme(Theme),
+  Ticker(Ticker),
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
