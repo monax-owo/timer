@@ -21,6 +21,10 @@ impl Timer {
   pub fn set_ticker<T: Ticker + 'static>(&mut self, ticker: T) {
     self.ticker = Box::new(ticker);
   }
+
+  pub fn list_tickers() -> Vec<Box<dyn Ticker>> {
+    vec![Box::new(NormalTicker)]
+  }
 }
 
 impl Default for Timer {
