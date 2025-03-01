@@ -16,7 +16,7 @@ pub struct Timer {
 
 impl Timer {
   pub fn tick(&mut self) -> bool {
-    (self.ticker.logic)(&mut self.data)
+    (self.ticker.logic)(&mut self.data, &mut self.ticker.state)
   }
 }
 

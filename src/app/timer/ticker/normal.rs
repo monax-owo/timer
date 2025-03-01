@@ -7,7 +7,7 @@ pub struct Normal;
 impl TickerBase for Normal {
   const NAME: &'static str = "Normal";
 
-  fn tick(data: &mut Data) -> bool {
+  fn tick(data: &mut Data, _state: &mut TickerState) -> bool {
     if data.enable {
       let now = Local::now().time();
       let next = data.next.get_or_insert(now + data.duration);

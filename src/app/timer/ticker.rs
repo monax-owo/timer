@@ -6,10 +6,13 @@ use pomodoro::Pomodoro;
 
 use super::Data;
 
+pub type TickerState = u32;
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Ticker {
   pub name: &'static str,
-  pub logic: fn(&mut Data) -> bool,
+  pub logic: fn(&mut Data, &mut u32) -> bool,
+  pub state: TickerState,
 }
 
 impl Ticker {
@@ -29,12 +32,13 @@ impl ToString for Ticker {
 }
 pub trait TickerBase {
   const NAME: &'static str;
-  fn tick(timer: &mut Data) -> bool;
+  fn tick(timer: &mut Data, state: &mut u32) -> bool;
 }
 
 const fn wrap<T: TickerBase>() -> Ticker {
   Ticker {
     name: T::NAME,
     logic: <Normal as TickerBase>::tick,
+    state: 0,
   }
 }
