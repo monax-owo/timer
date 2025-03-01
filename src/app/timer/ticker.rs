@@ -3,6 +3,9 @@ use chrono::{format::StrftimeItems, Local};
 use super::Data;
 
 pub trait Ticker {
+  fn name() -> &'static str
+  where
+    Self: Sized;
   fn tick(&self, timer: &mut Data) -> bool;
 }
 
@@ -15,6 +18,10 @@ impl Default for NormalTicker {
 }
 
 impl Ticker for NormalTicker {
+  fn name() -> &'static str {
+    "Normal"
+  }
+
   fn tick(&self, data: &mut Data) -> bool {
     if data.enable {
       let now = Local::now().time();
