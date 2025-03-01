@@ -1,4 +1,4 @@
-mod ticker;
+pub mod ticker;
 
 use std::{
   ops::{Deref, DerefMut},
@@ -19,7 +19,6 @@ impl Timer {
     (self.ticker.logic)(&mut self.data)
   }
 }
-
 
 impl Deref for Timer {
   type Target = Data;
