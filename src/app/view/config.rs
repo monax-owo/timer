@@ -1,14 +1,23 @@
-use crate::app::config::{ChangeConfig, ConfigEvent};
+use crate::app::{
+  config::{ChangeConfig, ConfigEvent},
+  timer::ticker::Ticker,
+};
 
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
+  let mode_pick = pick_list(Ticker::ALL_TICKER, Some(app.current_ticker.clone()), |v| {
+    Message::ChangeConfig(ChangeConfig::Ticker(v))
+  })
+  .text_size(12);
+
   let theme_pick = pick_list(Theme::ALL, Some(app.current_theme.clone()), |v| {
     Message::ChangeConfig(ChangeConfig::Theme(v))
   })
   .text_size(12);
 
   let mut config_items = vec![
+    ("select mode", mode_pick.into()),
     ("select theme", theme_pick.into()),
     ("testing notify", config_button("Send").on_press(Message::Notify).into()),
   ];
