@@ -5,7 +5,7 @@ use std::{
   time::Duration,
 };
 
-use chrono::NaiveTime;
+use chrono::NaiveDateTime;
 use ticker::Ticker;
 
 #[derive(Default)]
@@ -38,7 +38,7 @@ impl DerefMut for Timer {
 pub struct Data {
   pub enable: bool,
   pub duration: Duration,
-  pub next: Option<NaiveTime>,
+  pub next: Option<NaiveDateTime>,
 }
 
 impl Default for Data {

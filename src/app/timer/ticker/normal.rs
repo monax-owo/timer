@@ -9,7 +9,7 @@ impl TickerBase for Normal {
 
   fn tick(data: &mut Data, _state: &mut TickerState) -> bool {
     if data.enable {
-      let now = Local::now().time();
+      let now = Local::now().naive_local();
       let next = data.next.get_or_insert(now + data.duration);
 
       #[cfg(debug_assertions)]
@@ -19,7 +19,7 @@ impl TickerBase for Normal {
         println!("next: {}", next.format_with_items(fmt.clone()));
       }
 
-      let elapsed = dbg!(next.signed_duration_since(now).num_seconds()) <= 0;
+      let elapsed = &now > next;
 
       if elapsed {
         data.next = Some(*next + data.duration);
