@@ -30,6 +30,7 @@ impl ToString for Ticker {
     self.name.to_owned()
   }
 }
+
 pub trait TickerBase {
   const NAME: &'static str;
   fn tick(timer: &mut Data, state: &mut u32) -> bool;
@@ -38,7 +39,7 @@ pub trait TickerBase {
 const fn wrap<T: TickerBase>() -> Ticker {
   Ticker {
     name: T::NAME,
-    logic: <T as TickerBase>::tick,
+    logic: T::tick,
     state: 0,
   }
 }
