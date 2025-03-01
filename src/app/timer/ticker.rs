@@ -10,7 +10,7 @@ pub struct Ticker {
 }
 
 impl Ticker {
-  const ALL_TICKER: &[Ticker] = &[wrap::<Normal>()];
+  pub const ALL_TICKER: &[Ticker] = &[wrap::<Normal>()];
 }
 
 impl Default for Ticker {
