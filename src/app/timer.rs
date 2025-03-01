@@ -8,6 +8,7 @@ use std::{
 use chrono::NaiveTime;
 use ticker::Ticker;
 
+#[derive(Default)]
 pub struct Timer {
   ticker: Ticker,
   data: Data,
@@ -19,14 +20,6 @@ impl Timer {
   }
 }
 
-impl Default for Timer {
-  fn default() -> Self {
-    Self {
-      ticker: Ticker::default(),
-      data: Data::default(),
-    }
-  }
-}
 
 impl Deref for Timer {
   type Target = Data;
