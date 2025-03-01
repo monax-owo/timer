@@ -2,27 +2,32 @@ use chrono::{format::StrftimeItems, Local};
 
 use super::Data;
 
-pub trait Ticker {
-  fn name() -> &'static str
-  where
-    Self: Sized;
-  fn tick(&self, timer: &mut Data) -> bool;
+pub struct Ticker {
+  pub name: &'static str,
+  pub logic: fn(&mut Data) -> bool,
 }
 
-pub struct NormalTicker;
+impl Ticker {
+  const ALL_TICKER: &[Ticker] = &[wrap::<Normal>()];
+}
 
-impl Default for NormalTicker {
+impl Default for Ticker {
   fn default() -> Self {
-    Self
+    wrap::<Normal>()
   }
 }
 
-impl Ticker for NormalTicker {
-  fn name() -> &'static str {
-    "Normal"
-  }
+pub trait TickerBase {
+  const NAME: &'static str;
+  fn tick(timer: &mut Data) -> bool;
+}
 
-  fn tick(&self, data: &mut Data) -> bool {
+pub struct Normal;
+
+impl TickerBase for Normal {
+  const NAME: &'static str = "Normal";
+
+  fn tick(data: &mut Data) -> bool {
     if data.enable {
       let now = Local::now().time();
       let next = data.next.get_or_insert(now + data.duration);
@@ -42,5 +47,12 @@ impl Ticker for NormalTicker {
       }
     }
     false
+  }
+}
+
+const fn wrap<T: TickerBase>() -> Ticker {
+  Ticker {
+    name: T::NAME,
+    logic: <Normal as TickerBase>::tick,
   }
 }

@@ -6,31 +6,23 @@ use std::{
 };
 
 use chrono::NaiveTime;
-use ticker::{NormalTicker, Ticker};
+use ticker::Ticker;
 
 pub struct Timer {
-  ticker: Box<dyn Ticker>,
+  ticker: Ticker,
   data: Data,
 }
 
 impl Timer {
   pub fn tick(&mut self) -> bool {
-    self.ticker.tick(&mut self.data)
-  }
-
-  pub fn set_ticker<T: Ticker + 'static>(&mut self, ticker: T) {
-    self.ticker = Box::new(ticker);
-  }
-
-  pub fn list_tickers() -> Vec<Box<dyn Ticker>> {
-    vec![Box::new(NormalTicker)]
+    (self.ticker.logic)(&mut self.data)
   }
 }
 
 impl Default for Timer {
   fn default() -> Self {
     Self {
-      ticker: Box::new(NormalTicker),
+      ticker: Ticker::default(),
       data: Data::default(),
     }
   }
