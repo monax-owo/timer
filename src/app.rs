@@ -35,7 +35,6 @@ pub struct App {
 
   // timer
   pub timer: timer::Timer,
-  pub current_ticker: timer::ticker::Ticker,
 }
 
 #[derive(Debug, Clone)]
@@ -147,7 +146,6 @@ impl App {
       notification,
       config,
       timer,
-      current_ticker: timer::ticker::Ticker::default(),
     };
 
     config::load(&mut app_state);

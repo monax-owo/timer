@@ -6,7 +6,7 @@ use crate::app::{
 use super::*;
 
 pub(super) fn view(app: &App) -> Element<Message> {
-  let mode_pick = pick_list(Ticker::ALL_TICKER, Some(app.current_ticker.clone()), |v| {
+  let mode_pick = pick_list(Ticker::ALL_TICKER, Some(app.timer.ticker.clone()), |v| {
     Message::ChangeConfig(ChangeConfig::Ticker(v))
   })
   .text_size(12);

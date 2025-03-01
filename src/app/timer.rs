@@ -10,8 +10,8 @@ use ticker::Ticker;
 
 #[derive(Default)]
 pub struct Timer {
-  ticker: Ticker,
-  data: Data,
+  pub ticker: Ticker,
+  pub data: Data,
 }
 
 impl Timer {
