@@ -9,7 +9,7 @@ use chrono::NaiveTime;
 use ticker::{NormalTicker, Ticker};
 
 pub struct Timer {
-  ticker: Box<dyn ticker::Ticker>,
+  ticker: Box<dyn Ticker>,
   data: Data,
 }
 
