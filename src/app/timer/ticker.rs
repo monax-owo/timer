@@ -38,7 +38,7 @@ pub trait TickerBase {
 const fn wrap<T: TickerBase>() -> Ticker {
   Ticker {
     name: T::NAME,
-    logic: <Normal as TickerBase>::tick,
+    logic: <T as TickerBase>::tick,
     state: 0,
   }
 }
