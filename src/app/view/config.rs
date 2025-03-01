@@ -7,6 +7,7 @@ pub(super) fn view(app: &App) -> Element<Message> {
     Message::ChangeConfig(ChangeConfig::Theme(v))
   })
   .text_size(12);
+
   let mut config_items = vec![
     ("select theme", theme_pick.into()),
     ("testing notify", config_button("Send").on_press(Message::Notify).into()),

@@ -132,10 +132,10 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       }
       Info::Clear => app.info = None,
     },
-    Message::Pause(v) => {
-      app.timer.enable = !v;
-      // if stopped
-      if v {
+    Message::Pause(stopped) => {
+      app.timer.enable = !stopped;
+
+      if stopped {
         app.timer.next = None;
       }
       return Task::done(Message::Tick);
