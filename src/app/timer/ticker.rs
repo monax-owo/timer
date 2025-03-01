@@ -1,6 +1,8 @@
 mod normal;
+mod pomodoro;
 
 use normal::Normal;
+use pomodoro::Pomodoro;
 
 use super::Data;
 
@@ -11,7 +13,7 @@ pub struct Ticker {
 }
 
 impl Ticker {
-  pub const ALL_TICKER: &[Ticker] = &[wrap::<Normal>()];
+  pub const ALL_TICKER: &[Ticker] = &[wrap::<Normal>(), wrap::<Pomodoro>()];
 }
 
 impl Default for Ticker {
