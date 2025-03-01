@@ -33,7 +33,6 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
       // TODO
       window::Event::Moved(point) => {
         app.window_pos = Some(point);
-        dbg!(&app.window_pos);
       }
       window::Event::Unfocused => return window::close(id),
       _ => (),
