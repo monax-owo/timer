@@ -105,7 +105,10 @@ pub(crate) fn update(app: &mut App, message: Message) -> Task<Message> {
         dbg!(duration);
       }
       super::config::ChangeConfig::Theme(theme) => app.current_theme = theme,
-      super::config::ChangeConfig::Ticker(ticker) => app.timer.ticker = dbg!(ticker),
+      super::config::ChangeConfig::Ticker(ticker) => {
+        app.timer.ticker = dbg!(ticker);
+        return Task::done(Message::Pause(true));
+      }
     },
     Message::ChangePage(page) => app.page = page,
     Message::Info(info) => match info {
