@@ -7,7 +7,7 @@ use chrono::{format::StrftimeItems, Local, NaiveTime};
 
 pub struct Timer {
   ticker: Box<dyn Ticker>,
-  pub data: Data,
+  data: Data,
 }
 
 impl Timer {

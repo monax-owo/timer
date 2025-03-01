@@ -131,7 +131,7 @@ impl App {
     let duration = (&config.duration).into();
 
     let mut timer = timer::Timer::default();
-    timer.data.duration = duration;
+    timer.duration = duration;
 
     let mut app_state = App {
       window: None,
